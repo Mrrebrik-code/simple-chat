@@ -1,20 +1,22 @@
-import { createServer } from 'http';
-import {Server} from 'socket.io';
+import { Connection } from "./connection.js";
+import { User } from "./user.js";
 
-const httpServer = createServer();
-const io = new Server(httpServer, {
-    pingTimeout: 60000
-});
+export class ServerCore{
+    constructor(){
+        this.connections = [];
+    }
 
+    connect(socket){
+        let server = this;
+        let connection = new Connection();
+        let user = new User();
 
-io.on('connection', function(socket){
-    console.log("User connected to server!");
+        connection.init(socket, user, server);
 
-    socket.on('disconnect', () => {
-        console.log("User disconnect server!");
-    });
-});
+        let userId = user.id;
+        server.connections[userId] = connection;
 
-httpServer.listen(52300, ()=>{
-    console.log('Start server to port: 52300');
-});
+        console.log(`User [${userId}] connected to server!`);
+        return connection;
+    }
+}

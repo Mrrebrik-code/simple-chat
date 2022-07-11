@@ -33,6 +33,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
 				_isConnected = false;
 				_socketManager = null;
 			});
+
+			_socketManager.Socket.On<string>("connection-server", (data) =>
+			{
+				Debug.Log("You id-user: " + data);
+			});
 		}
 	}
 
