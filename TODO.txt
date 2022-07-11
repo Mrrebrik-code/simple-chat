@@ -1,0 +1,9 @@
+TODO:
+    1. Connection/Disconnection user to server
+    2. Create chat
+        1. Chat id
+        2. Chat password
+        3. Chat crypt message
+    3. Send message to users in chat room
+    4. Kick user from chat id - show message error connection
+    5. Ban user from chat id - show message error connection
