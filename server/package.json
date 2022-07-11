@@ -1,0 +1,16 @@
+{
+  "name": "simple-chat",
+  "version": "1.0.0",
+  "description": "simple chat to unity",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Mrrebrik",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.19",
+    "socket.io": "^4.5.1"
+  }
+}
