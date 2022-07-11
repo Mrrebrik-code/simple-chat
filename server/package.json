@@ -1,5 +1,6 @@
 {
   "name": "simple-chat",
+  "type": "module",
   "version": "1.0.0",
   "description": "simple chat to unity",
   "main": "server.js",
