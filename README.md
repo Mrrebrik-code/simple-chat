@@ -16,16 +16,13 @@
 Connecting to server in start.js (Node.js):
 ```js
   io.on('connection', function(socket){
-    let connection = server.connect(socket);
+        let connection = server.connect(socket);
 
-    connection.createEvents();
+        connection.createEvents();
     
-    //Send user id to client callback
-    connection.socket.emit("connection-server", connection.user.id);
+        //Send user id to client callback
+        connection.socket.emit("connection-server", connection.user.id);
   });
-  
-  
-  }
 ```
 
 Create connections to server.js (Node.js):
@@ -47,7 +44,6 @@ Create connections to server.js (Node.js):
 
         console.log(`User [${userId}] connected to server!`);
         return connection;
-    }
   }
 ```
 
@@ -62,8 +58,7 @@ Create events connection to current socket (Node.js):
         //socket events on to current connected server socket
         socket.on('disconnect', () => {
             console.log("User disconnect server!");
-        });
-  }
+   });
 ```
 
 # Client (Node.js)
