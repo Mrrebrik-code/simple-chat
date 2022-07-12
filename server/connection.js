@@ -25,5 +25,9 @@ export class Connection{
         socket.on('disconnect', () => {
             console.log("User disconnect server!");
         });
+
+        socket.on('create-account', (data)=>{
+
+        });
     }
 }
