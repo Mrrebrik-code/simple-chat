@@ -14,6 +14,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
 	[SerializeField] private bool _isAutoConnect = true;
 	private bool _isConnected = false;
 
+	private Action<string> onRegisterSuccessful;
+	private Action onRegisterError;
+
 	//Inovke to button - "Connect"
 	public void ConnectedToServer()
 	{
@@ -55,8 +58,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.On<string>(OnIOEvent.RegisterUser, OnRegisterUserToServer);
 	}
 
-	private Action<string> onRegisterSuccessful;
-	private Action onRegisterError;
+
 	public void RegisterUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
 	{
 		onRegisterSuccessful += callbackSuccessful;
@@ -108,5 +110,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("Disconnect to server!");
 		_isConnected = false;
 		_socketManager = null;
+
+		AccountManager.Close();
 	}
 }

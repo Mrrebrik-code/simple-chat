@@ -13,11 +13,24 @@ public static class AccountManager
 		_account = Account.Create();
 	}
 
+	public static void Close()
+	{
+		Debug.Log("Close account!");
+		_account = null;
+	}
+
 	public static void RegisterUserFromAccount(string nickname, string password, Action<bool> callback)
 	{
 		if (CheckingDataNicknameAndPassword(nickname, password) == false) return;
 
 		Debug.Log("Creating user to account...");
+
+		if(_account == null)
+		{
+			Debug.LogError("You not connecting to server! Please connect!");
+			callback?.Invoke(false);
+			return;
+		}
 
 		_account.Register(nickname, password, (userId) =>
 		{
