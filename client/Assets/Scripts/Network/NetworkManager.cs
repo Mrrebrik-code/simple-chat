@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BestHTTP.SocketIO3;
+using System;
+using Newtonsoft.Json;
+
 public class NetworkManager : SingletonMono<NetworkManager>
 {
 	private SocketManager _socketManager = null;
@@ -48,7 +51,34 @@ public class NetworkManager : SingletonMono<NetworkManager>
 			return;
 		}
 
+		_socketManager.Socket.On<string>(OnIOEvent.LoginUser, OnLoginUserToServer);
+		_socketManager.Socket.On<string>(OnIOEvent.RegisterUser, OnRegisterUserToServer);
+	}
 
+	public void RegisterUserToServer(User user, Action<string> callback)
+	{
+		var jsonSerializerSettings = new JsonSerializerSettings()
+		{
+			Formatting = Formatting.Indented
+		};
+
+		var json = JsonConvert.SerializeObject(user, jsonSerializerSettings);
+
+		Debug.Log(json);
+
+		_socketManager.Socket.Emit(EmitIOEvent.RegisterAccountUser, json);
+	}
+
+	private void OnLoginUserToServer(string data)
+	{
+		Debug.Log("OnLoginUserToServer");
+		Debug.Log(data);
+	}
+
+	private void OnRegisterUserToServer(string data)
+	{
+		Debug.Log("OnRegisterUserToServer");
+		Debug.Log(data);
 	}
 
 	private void OnConnectToServer()
@@ -57,6 +87,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_isConnected = true;
 		SubscribeSocketIOEvents();
 
+		AccountManager.Init();
 	}
 
 	private void OnDisconnectToServer()

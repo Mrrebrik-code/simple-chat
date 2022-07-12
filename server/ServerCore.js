@@ -1,14 +1,17 @@
-import { Connection } from "./connection.js";
-import { User } from "./user.js";
+import { Connection } from "./Connection.js";
+import { User } from "./User.js";
+
 
 export class ServerCore{
-    constructor(){
+    constructor(database){
         this.connections = [];
+        this.database = database;
     }
 
     connect(socket){
         let server = this;
-        let connection = new Connection();
+        let database = server.database;
+        let connection = new Connection(database);
         let user = new User();
 
         connection.init(socket, user, server);

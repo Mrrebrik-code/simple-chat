@@ -11,6 +11,7 @@
   "author": "Mrrebrik",
   "license": "ISC",
   "dependencies": {
+    "@supabase/supabase-js": "^1.35.4",
     "nodemon": "^2.0.19",
     "shortid": "^2.2.16",
     "socket.io": "^4.5.1"

@@ -9,6 +9,7 @@ public static class AccountManager
 
 	public static void Init()
 	{
+		Debug.Log("Init account base!");
 		_account = Account.Create();
 	}
 
@@ -50,8 +51,18 @@ public static class AccountManager
 
 	private static bool CheckingDataNicknameAndPassword(string nickname, string password)
 	{
-		if (nickname.Length > 10 || string.IsNullOrEmpty(nickname) == false) return false;
-		if (password.Length <= 4) return false;
+		if (nickname.Length < 10 && string.IsNullOrEmpty(nickname) == true)
+		{
+			Debug.Log("Имя слишком длинное или вы его не написали!");
+			return false;
+		}
+
+		if (password.Length <= 4)
+		{
+			Debug.Log("Пароль слишком короткий!");
+			return false;
+		}
+		
 
 		return true;
 	}
