@@ -8,35 +8,28 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 	[SerializeField] private string _address = "http://localhost:52300";
 	[SerializeField] private bool _isReconection = false;
-
+	[SerializeField] private bool _isAutoConnect = true;
 	private bool _isConnected = false;
 
+	//Inovke to button - "Connect"
 	public void ConnectedToServer()
 	{
 		if(_socketManager == null || _isConnected == false)
 		{
-			SocketOptions options = new SocketOptions()
+			SocketOptions socketOptions = new SocketOptions()
 			{
+				AutoConnect = _isAutoConnect,
 				Reconnection = _isReconection
 			};
-			_socketManager = new SocketManager(new System.Uri(_address), options);
 
-			_socketManager.Socket.On(SocketIOEventTypes.Connect, () =>
-			{
-				Debug.Log("Connection to server!");
-				_isConnected = true;
-				SubscribeSocketIOEvents();
-			});
+			_socketManager = new SocketManager(new System.Uri(_address), socketOptions);
 
-			_socketManager.Socket.On(SocketIOEventTypes.Disconnect, () =>
-			{
-				Debug.Log("Disconnect to server!");
-				_isConnected = false;
-				_socketManager = null;
-			});
+			_socketManager.Socket.On(SocketIOEventTypes.Connect, OnConnectToServer);
+			_socketManager.Socket.On(SocketIOEventTypes.Disconnect, OnDisconnectToServer);
 		}
 	}
 
+	//Inovke to button - "Disconnect"
 	public void DisconnectFromServer()
 	{
 		if(_socketManager != null && _isConnected == true)
@@ -56,9 +49,19 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		}
 
 
-		_socketManager.Socket.On<string>("connection-server", (data) =>
-		{
-			Debug.Log("You id-user: " + data);
-		});
+	}
+
+	private void OnConnectToServer()
+	{
+		Debug.Log("Connection to server!");
+		_isConnected = true;
+		SubscribeSocketIOEvents();
+	}
+
+	private void OnDisconnectToServer()
+	{
+		Debug.Log("Disconnect to server!");
+		_isConnected = false;
+		_socketManager = null;
 	}
 }

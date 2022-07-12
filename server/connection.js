@@ -1,4 +1,4 @@
-import { User } from './user.js';
+import { User } from './User.js';
 
 export class Connection{
     constructor(){
@@ -26,8 +26,8 @@ export class Connection{
             console.log("User disconnect server!");
         });
 
-        socket.on('create-account', (data)=>{
-
+        socket.on('create-account', (data) =>{
+            
         });
     }
 }

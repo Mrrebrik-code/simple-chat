@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { ServerCore } from './server.js';
+import { ServerCore } from './ServerCore.js';
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -14,8 +14,6 @@ io.on('connection', function(socket){
     let connection = server.connect(socket);
 
     connection.createEvents();
-    
-    connection.socket.emit("connection-server", connection.user.id);
 });
 
 httpServer.listen(52300, ()=>{
