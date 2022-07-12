@@ -1,22 +1,5 @@
-# simple-chat
-- simple chat to unity and node.js server
+# Server (Node.js)
 
-
-Connecting to server (C#):
-```c#
-
-  private SocketManager _socketManager = null;
-  [SerializeField] private string _address = "http://localhost:52300";
-
-  public void ConnectedToServer()
-  {
-      SocketOptions options = new SocketOptions()
-      {
-          Reconnection = _isReconection
-      };
-      _socketManager = new SocketManager(new System.Uri(_address), options);
-  }
-```
 Connecting to server in start.js (Node.js):
 ```js
   io.on('connection', function(socket){
@@ -24,12 +7,37 @@ Connecting to server in start.js (Node.js):
 
     connection.createEvents();
     
+    //Send user id to client callback
     connection.socket.emit("connection-server", connection.user.id);
   });
   
   
   }
 ```
+
+Create connections to server.js (Node.js):
+```js
+ connect(socket){
+        let server = this;
+        let connection = new Connection();
+        
+        //Create new object user
+        let user = new User();
+        
+        //Initialization connection to current socket
+        connection.init(socket, user, server);
+
+        let userId = user.id;
+        
+        //Add array connections server list
+        server.connections[userId] = connection;
+
+        console.log(`User [${userId}] connected to server!`);
+        return connection;
+    }
+  }
+```
+
 Create events connection to current socket (Node.js):
 ```js
   createEvents(){
@@ -37,9 +45,12 @@ Create events connection to current socket (Node.js):
         let socket = connection.socket;
         let server = connection.server;
         let user = connection.user;
-
+        
+        //socket events on to current connected server socket
         socket.on('disconnect', () => {
             console.log("User disconnect server!");
         });
   }
 ```
+
+# Client (Node.js)
