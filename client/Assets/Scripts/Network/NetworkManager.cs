@@ -56,6 +56,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("Connection to server!");
 		_isConnected = true;
 		SubscribeSocketIOEvents();
+
 	}
 
 	private void OnDisconnectToServer()
