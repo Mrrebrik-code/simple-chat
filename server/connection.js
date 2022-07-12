@@ -37,6 +37,9 @@ export class Connection{
             
             if(isCreate){
                 console.log("Create user to database!");
+
+                let json = JSON.stringify(userData);
+                socket.emit("register-user", json);
             }else{
                 console.log("Error creating user.");
             }

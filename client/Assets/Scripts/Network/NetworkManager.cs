@@ -55,8 +55,13 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.On<string>(OnIOEvent.RegisterUser, OnRegisterUserToServer);
 	}
 
-	public void RegisterUserToServer(User user, Action<string> callback)
+	private Action<string> onRegisterSuccessful;
+	private Action onRegisterError;
+	public void RegisterUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
 	{
+		onRegisterSuccessful += callbackSuccessful;
+		onRegisterError += callbackError;
+
 		var jsonSerializerSettings = new JsonSerializerSettings()
 		{
 			Formatting = Formatting.Indented
@@ -79,6 +84,14 @@ public class NetworkManager : SingletonMono<NetworkManager>
 	{
 		Debug.Log("OnRegisterUserToServer");
 		Debug.Log(data);
+
+		var user = JsonConvert.DeserializeObject<User>(data);
+
+		if(user != null) onRegisterSuccessful?.Invoke(user.Id);
+		else onRegisterError?.Invoke();
+
+		onRegisterSuccessful = null;
+		onRegisterError = null;
 	}
 
 	private void OnConnectToServer()
