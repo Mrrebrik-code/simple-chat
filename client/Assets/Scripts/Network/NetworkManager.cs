@@ -13,7 +13,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 	public void ConnectedToServer()
 	{
-		if(_socketManager == null && _isConnected == false)
+		if(_socketManager == null || _isConnected == false)
 		{
 			SocketOptions options = new SocketOptions()
 			{
@@ -21,22 +21,18 @@ public class NetworkManager : SingletonMono<NetworkManager>
 			};
 			_socketManager = new SocketManager(new System.Uri(_address), options);
 
-
 			_socketManager.Socket.On(SocketIOEventTypes.Connect, () =>
 			{
 				Debug.Log("Connection to server!");
 				_isConnected = true;
+				SubscribeSocketIOEvents();
 			});
+
 			_socketManager.Socket.On(SocketIOEventTypes.Disconnect, () =>
 			{
 				Debug.Log("Disconnect to server!");
 				_isConnected = false;
 				_socketManager = null;
-			});
-
-			_socketManager.Socket.On<string>("connection-server", (data) =>
-			{
-				Debug.Log("You id-user: " + data);
 			});
 		}
 	}
@@ -46,7 +42,23 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		if(_socketManager != null && _isConnected == true)
 		{
 			_socketManager.Close();
+			_isConnected = false;
 			_socketManager = null;
 		}
+	}
+
+	private void SubscribeSocketIOEvents()
+	{
+		if (_socketManager == null || _isConnected == false)
+		{
+			Debug.LogError("Socket event subscription failed due to null or false connection to SocketManager server!");
+			return;
+		}
+
+
+		_socketManager.Socket.On<string>("connection-server", (data) =>
+		{
+			Debug.Log("You id-user: " + data);
+		});
 	}
 }
