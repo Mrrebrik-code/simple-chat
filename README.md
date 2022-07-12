@@ -1,3 +1,5 @@
+![Alt-текст](https://github.com/Mrrebrik-code/simple-chat/blob/main/client/Assets/Sprites/Templates/ui_screenshot.png?raw=true "client-ui-template")
+
 # Server (Node.js)
 
 Connecting to server in start.js (Node.js):
