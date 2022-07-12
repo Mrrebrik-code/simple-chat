@@ -2,6 +2,17 @@
 
 # Server (Node.js)
 
+| ID | Type | Evenet name | Description | Data|
+|:----------------:|:---------:|:---------:|:----------------:|:----------------:|
+| 1 | On | connection | Connected new socket | null |
+| 2 | On | disconnect | Disconnected socket | null |
+| 3 | On | create-account | Create new account to current socket | user object |
+
+| ID | Type | Evenet name | Description | Data|
+|:----------------:|:---------:|:---------:|:----------------:|:----------------:|
+| 1 | Emit | connection-server | Send to current socket client status successful connected | string |
+
+
 Connecting to server in start.js (Node.js):
 ```js
   io.on('connection', function(socket){
