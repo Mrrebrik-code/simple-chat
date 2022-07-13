@@ -114,4 +114,25 @@ export class Database{
             return null;
         }
     }
+
+    async addCurrentUserToChat(nameChat, user){
+        let usersData = await this.getUsersToChatName(nameChat);
+        let userData = {
+            name: user.nickname,
+            id: user.id
+        }
+
+        if(usersData != null){
+            usersData.users.push(userData);
+        }
+        else{
+            usersData = {
+                users: [userData]
+            };
+        }
+
+        //Set new json data to database users in current chat
+
+        
+    }
 }
