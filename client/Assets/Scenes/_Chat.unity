@@ -5172,6 +5172,9 @@ MonoBehaviour:
   _registeAccountButton: {fileID: 528570571}
   _nicknameInput: {fileID: 1880496586}
   _passwordInput: {fileID: 876843740}
+  _loginAccountButton: {fileID: 1591791206}
+  _nicknameInput2: {fileID: 2045640724}
+  _passwordInput2: {fileID: 1429279270}
 --- !u!4 &824847930
 Transform:
   m_ObjectHideFlags: 0
@@ -5698,7 +5701,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.275024, y: 72.22998}
+  m_AnchoredPosition: {x: 14.274902, y: 72.22998}
   m_SizeDelta: {x: 399.01, y: -170.84}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &926961288
@@ -6589,7 +6592,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 12.46, y: -10.390015}
+  m_AnchoredPosition: {x: 12.460007, y: -10.390015}
   m_SizeDelta: {x: -29.46, y: -10.39}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1181126721
@@ -9143,7 +9146,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 83.49, y: -34.085022}
+  m_AnchoredPosition: {x: 83.49, y: -34.08496}
   m_SizeDelta: {x: 150.99, y: 58.17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1549950577
@@ -9289,6 +9292,7 @@ GameObject:
   - component: {fileID: 1591791205}
   - component: {fileID: 1591791204}
   - component: {fileID: 1591791203}
+  - component: {fileID: 1591791206}
   m_Layer: 5
   m_Name: Login_btn
   m_TagString: Untagged
@@ -9411,6 +9415,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1591791201}
   m_CullTransparentMesh: 1
+--- !u!114 &1591791206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591791201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1705f9db912d0724cb16ab9ca59b2368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1601401290
 GameObject:
   m_ObjectHideFlags: 0
@@ -9604,7 +9620,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.275024, y: -456.47998}
+  m_AnchoredPosition: {x: 14.274902, y: -456.47986}
   m_SizeDelta: {x: 399.01, y: -941.78}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1644079106

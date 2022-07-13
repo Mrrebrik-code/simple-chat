@@ -37,12 +37,11 @@ public static class AccountManager
 			Debug.Log($"Successful create user! ID: {userId}");
 			callback?.Invoke(true);
 		}, () =>
+
 		{
 			Debug.Log($"Error create user");
 			callback?.Invoke(false);
 		});
-
-		
 	}
 
 	public static void LoginUserToAccount(string nickname, string password, Action<bool> callback)
@@ -51,7 +50,14 @@ public static class AccountManager
 
 		Debug.Log("Login to user account...");
 
-		_account.Register(nickname, password, (userId) =>
+		if (_account == null)
+		{
+			Debug.LogError("You not connecting to server! Please connect!");
+			callback?.Invoke(false);
+			return;
+		}
+
+		_account.Login(nickname, password, (userId) =>
 		{
 			Debug.Log($"Successful login user! ID: {userId}");
 			callback?.Invoke(true);

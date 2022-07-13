@@ -17,6 +17,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
 	private Action<string> onRegisterSuccessful;
 	private Action onRegisterError;
 
+	private Action<string> onLoginSuccessful;
+	private Action onLoginError;
+
 	//Inovke to button - "Connect"
 	public void ConnectedToServer()
 	{
@@ -76,10 +79,35 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.Emit(EmitIOEvent.RegisterAccountUser, json);
 	}
 
+	public void LoginUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
+	{
+		onLoginSuccessful += callbackSuccessful;
+		onLoginError += callbackError;
+
+		var jsonSerializerSettings = new JsonSerializerSettings()
+		{
+			Formatting = Formatting.Indented
+		};
+
+		var json = JsonConvert.SerializeObject(user, jsonSerializerSettings);
+
+		Debug.Log(json);
+
+		_socketManager.Socket.Emit(EmitIOEvent.LoginAccountUser, json);
+	}
+
 	private void OnLoginUserToServer(string data)
 	{
 		Debug.Log("OnLoginUserToServer");
 		Debug.Log(data);
+
+		var user = JsonConvert.DeserializeObject<User>(data);
+
+		if (user != null) onLoginSuccessful?.Invoke(user.Id);
+		else onLoginError?.Invoke();
+
+		onLoginSuccessful = null;
+		onLoginError = null;
 	}
 
 	private void OnRegisterUserToServer(string data)

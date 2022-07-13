@@ -11,9 +11,8 @@ public class Account
 
 	public void Login(string nickname, string password, Action<string> callbackSuccessful, Action callbackError)
 	{
-		
-
-		
+		var user = new User(nickname, password, "default");
+		NetworkManager.Instance.LoginUserToServer(user, callbackSuccessful, callbackError);
 	}
 
 	public void Register(string nickname, string password, Action<string> callbackSuccessful, Action callbackError)

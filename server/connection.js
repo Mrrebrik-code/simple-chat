@@ -47,8 +47,33 @@ export class Connection{
 
         });
 
-        socket.on('login-account', (data) =>{
-            
+        socket.on('login-account', async (data) =>{
+            let userData = JSON.parse(data);
+            let nickname = userData["Nickname"];
+            let password = userData["Password"];
+
+            let isNickname = await database.tryUserNickname(nickname);
+            if(isNickname){
+                console.log("Nickname good!");
+
+                let userLogin = await database.tryUserPassword(nickname, password);
+
+                if(userLogin != null){
+                    userData["Id"] = userLogin.id;
+                    user.id = userLogin.id;
+
+                    console.log(`User [${user.id}] logined to account!`);
+
+                    let json = JSON.stringify(userData);
+                    socket.emit("login-user", json);
+                }
+                else{
+                    console.log(`Error logined user. Failed password!`);
+                }
+            }else{
+                console.log(`Error logined user. Failed nickname!`);
+            }
+
         });
     }
 }
