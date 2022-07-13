@@ -20,6 +20,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
 	private Action<string> onLoginSuccessful;
 	private Action onLoginError;
 
+	private Action<Chat> onChatCreateSuccessful;
+	private Action onChatCreateError;
+
 	//Inovke to button - "Connect"
 	public void ConnectedToServer()
 	{
@@ -59,6 +62,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 		_socketManager.Socket.On<string>(OnIOEvent.LoginUser, OnLoginUserToServer);
 		_socketManager.Socket.On<string>(OnIOEvent.RegisterUser, OnRegisterUserToServer);
+
+		_socketManager.Socket.On<string>(OnIOEvent.CreateChat, OnCreateChatToServer);
 	}
 
 
@@ -96,18 +101,39 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.Emit(EmitIOEvent.LoginAccountUser, json);
 	}
 
-	private void OnLoginUserToServer(string data)
+
+
+	public void CreateChatToServer(Chat chat, Action<Chat> callbackSuccessful, Action callbackError)
 	{
-		Debug.Log("OnLoginUserToServer");
+		onChatCreateSuccessful += callbackSuccessful;
+		onChatCreateError += callbackError;
+
+		var jsonSerializerSettings = new JsonSerializerSettings()
+		{
+			Formatting = Formatting.Indented
+		};
+
+		var json = JsonConvert.SerializeObject(chat, jsonSerializerSettings);
+
+		Debug.Log(json);
+
+		_socketManager.Socket.Emit(EmitIOEvent.CreateChat, json);
+	}
+
+
+	//Events On Scoket IO
+	private void OnCreateChatToServer(string data)
+	{
+		Debug.Log("OnCreateChatToServer");
 		Debug.Log(data);
 
-		var user = JsonConvert.DeserializeObject<User>(data);
+		var chat = JsonConvert.DeserializeObject<Chat>(data);
 
-		if (user != null) onLoginSuccessful?.Invoke(user.Id);
-		else onLoginError?.Invoke();
+		if (chat != null) onChatCreateSuccessful?.Invoke(chat);
+		else onChatCreateError?.Invoke();
 
-		onLoginSuccessful = null;
-		onLoginError = null;
+		onChatCreateSuccessful = null;
+		onChatCreateError = null;
 	}
 
 	private void OnRegisterUserToServer(string data)
@@ -122,6 +148,20 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 		onRegisterSuccessful = null;
 		onRegisterError = null;
+	}
+
+	private void OnLoginUserToServer(string data)
+	{
+		Debug.Log("OnLoginUserToServer");
+		Debug.Log(data);
+
+		var user = JsonConvert.DeserializeObject<User>(data);
+
+		if (user != null) onLoginSuccessful?.Invoke(user.Id);
+		else onLoginError?.Invoke();
+
+		onLoginSuccessful = null;
+		onLoginError = null;
 	}
 
 	private void OnConnectToServer()

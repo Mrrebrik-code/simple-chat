@@ -1,30 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ChatManager : SingletonMono<ChatManager>
+public static class ChatManager
 {
-	[SerializeField] private TMP_Text _statusChatText;
+	private static Chat _chat = null;
 
-	private Chat _chat = null;
-
-	public void CreateChat(string name, string password)
+	public static void CreateChat(string name, string password, Action<bool> callback)
 	{
 		Chat.Create(name, password, (chat) =>
 		{
 			_chat = chat;
 
 			Debug.Log("Chat create successful!");
+			callback?.Invoke(true);
 		}, () =>
 		{
 			_chat = null;
 
 			Debug.Log("Chat create failed!");
+			callback?.Invoke(false);
 		});
 	}
 
-	public void JoinChat(string name, string password)
+	public static void JoinChat(string name, string password)
 	{
 		Chat.Join(name, password, (chat) =>
 		{
@@ -39,7 +40,7 @@ public class ChatManager : SingletonMono<ChatManager>
 		});
 	}
 
-	public void LeaveChat()
+	public static void LeaveChat()
 	{
 		_chat.Leave();
 		_chat = null;

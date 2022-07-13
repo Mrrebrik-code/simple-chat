@@ -76,7 +76,21 @@ export class Connection{
         });
 
         socket.on('create-chat', async (data) =>{
+            let chatData = JSON.parse(data);
 
+            let chatName = chatData["Name"];
+            let chatPassword = chatData["Password"];
+
+            let isCreate = await database.createChat(chatName, chatPassword);
+            
+            if(isCreate){
+                console.log("Create chat to database!");
+
+                let json = JSON.stringify(chatData);
+                socket.emit("crate-chat", json);
+            }else{
+                console.log("Error creating chat.");
+            }
         });
 
         socket.on('join-chat', async (data) =>{

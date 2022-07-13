@@ -12,7 +12,7 @@ public class Chat
 	{
 		var chat = CreateObjectChat(name, password);
 
-
+		NetworkManager.Instance.CreateChatToServer(chat, callbackSuccessful, callbackError);
 	}
 
 	public static void Join(string name, string password, Action<Chat> callbackSuccessful, Action callbackError)

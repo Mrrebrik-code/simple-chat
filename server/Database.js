@@ -58,5 +58,42 @@ export class Database{
 
     async createChat(name, password){
         let supabase = this.supabase;
+
+        let chat = await supabase
+        .from('chats')
+        .insert(
+        [ 
+            { 
+                name: name, 
+                password: password
+            }
+        ]);
+
+        return Boolean(chat.data.length);
+    }
+
+    async tryChatName(name){
+        let supabase = this.supabase;
+
+        let user = await supabase
+        .from('chats')
+        .select('name').eq('name', name);
+
+        return  Boolean(user.data.length);
+    }
+
+    async tryChatPassword(name, password){
+        let supabase = this.supabase;
+
+        let chat = await supabase
+        .from('chats')
+        .select('password').eq('name', name);
+        
+        if(chat.data[0].password == password){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

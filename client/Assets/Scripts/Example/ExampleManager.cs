@@ -17,10 +17,38 @@ public class ExampleManager : MonoBehaviour
 	[SerializeField] private TMP_InputField _nicknameInput2;
 	[SerializeField] private TMP_InputField _passwordInput2;
 
+	[Space]
+
+	[Header("Create chat:")]
+	[SerializeField] private UIButton _createChatButton;
+	[SerializeField] private TMP_InputField _nameChatInput;
+	[SerializeField] private TMP_InputField _passwordChatInput;
+
 	private void Start()
 	{
 		_registeAccountButton.Subscribe(RegisterAccount);
 		_loginAccountButton.Subscribe(LoginAccount);
+		_createChatButton.Subscribe(CreateChat);
+	}
+
+	private void CreateChat()
+	{
+		Debug.Log("CreateChat UIButton");
+
+		var name = _nameChatInput.text;
+		var password = _passwordChatInput.text;
+
+		ChatManager.CreateChat(name, password, (callback) =>
+		{
+			if (callback)
+			{
+				Debug.Log("**COMPLET CHAT CREATE");
+			}
+			else
+			{
+				Debug.Log("**FAILED CHAT CREATE");
+			}
+		});
 	}
 
 	private void RegisterAccount()
