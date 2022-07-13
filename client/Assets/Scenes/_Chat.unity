@@ -2760,6 +2760,7 @@ GameObject:
   - component: {fileID: 326586423}
   - component: {fileID: 326586422}
   - component: {fileID: 326586421}
+  - component: {fileID: 326586424}
   m_Layer: 5
   m_Name: JoinChat_btn
   m_TagString: Untagged
@@ -2831,19 +2832,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 326586422}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 205754631}
-        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
-        m_MethodName: ConnectedToServer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &326586422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2882,6 +2871,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326586419}
   m_CullTransparentMesh: 1
+--- !u!114 &326586424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326586419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1705f9db912d0724cb16ab9ca59b2368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &359823355
 GameObject:
   m_ObjectHideFlags: 0
@@ -5313,6 +5314,9 @@ MonoBehaviour:
   _createChatButton: {fileID: 1138703271}
   _nameChatInput: {fileID: 1043787394}
   _passwordChatInput: {fileID: 215726931}
+  _joinChatButton: {fileID: 326586424}
+  _nameChatJoinInput: {fileID: 2031204843}
+  _passwordChatJoinInput: {fileID: 2114317892}
 --- !u!4 &824847930
 Transform:
   m_ObjectHideFlags: 0
@@ -9591,7 +9595,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.9809, y: 12.72}
+  m_AnchoredPosition: {x: -2.9809, y: 12.720001}
   m_SizeDelta: {x: 1434.3, y: 287.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1601401292

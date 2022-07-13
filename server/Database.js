@@ -96,4 +96,22 @@ export class Database{
             return false;
         }
     }
+
+    async getUsersToChatName(name){
+        let supabase = this.supabase;
+
+        let chat = await supabase
+        .from('chats')
+        .select('users').eq('name', name);
+
+        if(chat.data[0].users != null && chat.data[0].users.length != 0){
+            let chatData = {
+                users: chat.data[0].users
+            }
+
+            return chatData;
+        } else{
+            return null;
+        }
+    }
 }

@@ -24,11 +24,19 @@ public class ExampleManager : MonoBehaviour
 	[SerializeField] private TMP_InputField _nameChatInput;
 	[SerializeField] private TMP_InputField _passwordChatInput;
 
+	[Space]
+
+	[Header("Join chat:")]
+	[SerializeField] private UIButton _joinChatButton;
+	[SerializeField] private TMP_InputField _nameChatJoinInput;
+	[SerializeField] private TMP_InputField _passwordChatJoinInput;
+
 	private void Start()
 	{
 		_registeAccountButton.Subscribe(RegisterAccount);
 		_loginAccountButton.Subscribe(LoginAccount);
 		_createChatButton.Subscribe(CreateChat);
+		_joinChatButton.Subscribe(JoinChat);
 	}
 
 	private void CreateChat()
@@ -47,6 +55,26 @@ public class ExampleManager : MonoBehaviour
 			else
 			{
 				Debug.Log("**FAILED CHAT CREATE");
+			}
+		});
+	}
+
+	private void JoinChat()
+	{
+		Debug.Log("JoinChat UIButton");
+
+		var name = _nameChatJoinInput.text;
+		var password = _passwordChatJoinInput.text;
+
+		ChatManager.JoinChat(name, password, (callback) =>
+		{
+			if (callback)
+			{
+				Debug.Log("**COMPLET CHAT JOIN");
+			}
+			else
+			{
+				Debug.Log("**FAILED CHAT JOIN");
 			}
 		});
 	}

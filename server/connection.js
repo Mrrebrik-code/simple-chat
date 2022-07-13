@@ -43,8 +43,6 @@ export class Connection{
             }else{
                 console.log("Error creating user.");
             }
-
-
         });
 
         socket.on('login-account', async (data) =>{
@@ -94,7 +92,37 @@ export class Connection{
         });
 
         socket.on('join-chat', async (data) =>{
-            
+            let chatData = JSON.parse(data);
+            let name = chatData["Name"];
+            let password = chatData["Password"];
+
+            let chatCallback = {
+                name: name,
+                password, password
+            }
+
+            let isName = await database.tryChatName(name);
+            if(isName){
+                var isPassword = await database.tryChatPassword(name, password);
+
+                if(isPassword){
+                
+                    let usersChat = await database.getUsersToChatName(name);
+                    console.log(usersChat);
+                    if(usersChat != null){
+                        console.log(usersChat.users);
+                        chatCallback.users = usersChat.users;
+                    }
+
+                    let json = JSON.stringify(chatCallback);
+                    socket.emit("join-chat", json);
+
+                }else{
+                    console.log("Error joined to chat. Failed password!");
+                }
+            }else{
+                console.log("Error joined to chat. Failed name!");
+            }
         });
 
         socket.on('leave-chat', async () =>{

@@ -13,6 +13,12 @@ public class User
 		Id = id;
 	}
 
+	public User(string nickname, string id)
+	{
+		Id = id;
+		Nickname = nickname;
+	}
+
 	public void SetId(string userId)
 	{
 		Id = userId;

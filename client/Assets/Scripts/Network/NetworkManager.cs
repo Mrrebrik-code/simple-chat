@@ -4,6 +4,7 @@ using UnityEngine;
 using BestHTTP.SocketIO3;
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class NetworkManager : SingletonMono<NetworkManager>
 {
@@ -20,8 +21,14 @@ public class NetworkManager : SingletonMono<NetworkManager>
 	private Action<string> onLoginSuccessful;
 	private Action onLoginError;
 
-	private Action<Chat> onChatCreateSuccessful;
+	private Action<Chat, User[]> onChatCreateSuccessful;
 	private Action onChatCreateError;
+
+	private Action<Chat, User[]> onChatJoinSuccessful;
+	private Action onChatJoinError;
+	
+
+	
 
 	//Inovke to button - "Connect"
 	public void ConnectedToServer()
@@ -64,7 +71,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.On<string>(OnIOEvent.RegisterUser, OnRegisterUserToServer);
 
 		_socketManager.Socket.On<string>(OnIOEvent.CreateChat, OnCreateChatToServer);
+		_socketManager.Socket.On<string>(OnIOEvent.JoinChat, OnJoinChatToServer);
 	}
+
 
 
 	public void RegisterUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
@@ -103,7 +112,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 
 
-	public void CreateChatToServer(Chat chat, Action<Chat> callbackSuccessful, Action callbackError)
+	public void CreateChatToServer(Chat chat, Action<Chat, User[]> callbackSuccessful, Action callbackError)
 	{
 		onChatCreateSuccessful += callbackSuccessful;
 		onChatCreateError += callbackError;
@@ -120,6 +129,24 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.Emit(EmitIOEvent.CreateChat, json);
 	}
 
+	public void JoinChatFromServer(Chat chat, Action<Chat, User[]> callbackSuccessful, Action callbackError)
+	{
+		onChatJoinSuccessful += callbackSuccessful;
+		onChatJoinError += callbackError;
+
+		var jsonSerializerSettings = new JsonSerializerSettings()
+		{
+			Formatting = Formatting.Indented
+		};
+
+		var json = JsonConvert.SerializeObject(chat, jsonSerializerSettings);
+
+		Debug.Log(json);
+
+
+		_socketManager.Socket.Emit(EmitIOEvent.JoinChat, json);
+	}
+
 
 	//Events On Scoket IO
 	private void OnCreateChatToServer(string data)
@@ -129,12 +156,45 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 		var chat = JsonConvert.DeserializeObject<Chat>(data);
 
-		if (chat != null) onChatCreateSuccessful?.Invoke(chat);
+		if (chat != null) onChatCreateSuccessful?.Invoke(chat, null);
 		else onChatCreateError?.Invoke();
 
 		onChatCreateSuccessful = null;
 		onChatCreateError = null;
 	}
+	private void OnJoinChatToServer(string data)
+	{
+		Debug.Log("OnJoinChatToServer");
+		Debug.Log(data);
+
+		List<User> users = new List<User>();
+
+		var chatData = JObject.Parse(data);
+
+		if (chatData.ContainsKey("users"))
+		{
+			var JObjectUsers = JObject.Parse(chatData["users"].ToString());
+
+			foreach (var userData in JObjectUsers)
+			{
+				foreach (var item in userData.Value)
+				{
+					var user = new User(item["name"].ToString(), item["id"].ToString());
+					users.Add(user);
+				}
+			}
+		}
+		
+		
+		var chat = new Chat(chatData["name"].ToString(), chatData["password"].ToString());
+
+		if (chat != null) onChatJoinSuccessful?.Invoke(chat, users.ToArray());
+		else onChatJoinError?.Invoke();
+
+		onChatJoinSuccessful = null;
+		onChatJoinError = null;
+	}
+
 
 	private void OnRegisterUserToServer(string data)
 	{
