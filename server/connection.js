@@ -66,8 +66,7 @@ export class Connection{
 
                     let json = JSON.stringify(userData);
                     socket.emit("login-user", json);
-                }
-                else{
+                }else{
                     console.log(`Error logined user. Failed password!`);
                 }
             }else{

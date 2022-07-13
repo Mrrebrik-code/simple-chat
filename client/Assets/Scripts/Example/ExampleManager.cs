@@ -16,6 +16,7 @@ public class ExampleManager : MonoBehaviour
 	[SerializeField] private UIButton _loginAccountButton;
 	[SerializeField] private TMP_InputField _nicknameInput2;
 	[SerializeField] private TMP_InputField _passwordInput2;
+
 	private void Start()
 	{
 		_registeAccountButton.Subscribe(RegisterAccount);

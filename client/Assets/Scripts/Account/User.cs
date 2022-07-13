@@ -12,5 +12,10 @@ public class User
 		Password = password;
 		Id = id;
 	}
+
+	public void SetId(string userId)
+	{
+		Id = userId;
+	}
 }
 

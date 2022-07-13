@@ -11,13 +11,31 @@ public class Account
 
 	public void Login(string nickname, string password, Action<string> callbackSuccessful, Action callbackError)
 	{
-		var user = new User(nickname, password, "default");
-		NetworkManager.Instance.LoginUserToServer(user, callbackSuccessful, callbackError);
+		User = new User(nickname, password, "default");
+
+		callbackSuccessful += OnHandleSuccesfulUser;
+		callbackError += OnHandleFailedUser;
+
+		NetworkManager.Instance.LoginUserToServer(User, callbackSuccessful, callbackError);
 	}
 
 	public void Register(string nickname, string password, Action<string> callbackSuccessful, Action callbackError)
 	{
-		var user = new User(nickname, password, "default");
-		NetworkManager.Instance.RegisterUserToServer(user, callbackSuccessful, callbackError);
+		User = new User(nickname, password, "default");
+
+		callbackSuccessful += OnHandleSuccesfulUser;
+		callbackError += OnHandleFailedUser;
+
+		NetworkManager.Instance.RegisterUserToServer(User, callbackSuccessful, callbackError);
+	}
+
+	private void OnHandleSuccesfulUser(string userId)
+	{
+		User.SetId(userId);
+	}
+
+	private void OnHandleFailedUser()
+	{
+		User = null;
 	}
 }
