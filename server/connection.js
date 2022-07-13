@@ -74,5 +74,17 @@ export class Connection{
             }
 
         });
+
+        socket.on('create-chat', async (data) =>{
+
+        });
+
+        socket.on('join-chat', async (data) =>{
+            
+        });
+
+        socket.on('leave-chat', async () =>{
+            
+        });
     }
 }

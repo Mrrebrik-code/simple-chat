@@ -55,4 +55,8 @@ export class Database{
             return null;
         }
     }
+
+    async createChat(name, password){
+        let supabase = this.supabase;
+    }
 }
