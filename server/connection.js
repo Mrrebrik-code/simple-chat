@@ -29,6 +29,32 @@ export class Connection{
             console.log("User disconnect server!");
         });
 
+        socket.on('disconnecting', async ()=>{
+            if(user.currentChat != null){
+                var isRemoveCurrentUser = await database.removeCurrentUserToChat(user);
+
+                if(isRemoveCurrentUser){
+                    let userData = {
+                        nickname: user.nickname,
+                        id: user.id
+                    };
+
+                    let jsonLeaveUser = JSON.stringify(userData);
+                    socket.to(user.currentChat).emit("leave-chat-target-user", jsonLeaveUser);
+
+                    socket.leave(user.currentChat);
+
+                    console.log(`Leave current chat name ${user.currentChat}`);
+                    user.currentChat = null;
+                }else{
+                    console.log(`Error Leave chat!`);
+                }
+
+            }else{
+                console.log("User not chat!");
+            }
+        });
+
         socket.on('register-account', async (data) =>{
             let userData = JSON.parse(data);
             userData["Id"] = user.id; 
