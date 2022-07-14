@@ -173,15 +173,21 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 		if (chatData.ContainsKey("users"))
 		{
-			var JObjectUsers = JObject.Parse(chatData["users"].ToString());
+			Debug.Log("AASDDD");
+			var JObjectUserT = JArray.Parse(chatData["users"].ToString());
+			Debug.Log(JObjectUserT.ToString());
+			//var JObjectUsers = JObject.Parse(chatData["users"].ToString());
 
-			foreach (var userData in JObjectUsers)
+			foreach (var userData in JObjectUserT)
 			{
-				foreach (var item in userData.Value)
+				var user = new User(userData["name"].ToString(), userData["id"].ToString());
+				users.Add(user);
+
+				/*foreach (var item in userData.Value)
 				{
 					var user = new User(item["name"].ToString(), item["id"].ToString());
 					users.Add(user);
-				}
+				}*/
 			}
 		}
 		

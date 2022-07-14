@@ -84,9 +84,31 @@ public class ExampleManager : MonoBehaviour
 		});
 	}
 
+	[SerializeField] private Transform _contentUserHolders;
+	[SerializeField] private UserHolder _userHolderPrefab;
+
+	private List<UserHolder> _userHolders = new List<UserHolder>();
 	private void CreateUserToPanel(User user)
 	{
+		var userHolder = Instantiate(_userHolderPrefab, _contentUserHolders);
 
+		userHolder.Init(user, _userHolders.Count + 1);
+		userHolder.Subscribe(HandleUserHolder);
+
+		_userHolders.Add(userHolder);
+	}
+
+	private void HandleUserHolder(TypeHandleUserHolder typeHandler)
+	{
+		switch (typeHandler)
+		{
+			case TypeHandleUserHolder.kick:
+				Debug.Log("TypeHandleUserHolder.kick");
+				break;
+			case TypeHandleUserHolder.ban:
+				Debug.Log("TypeHandleUserHolder.ban");
+				break;
+		}
 	}
 
 	private void RegisterAccount()
