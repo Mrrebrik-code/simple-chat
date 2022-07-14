@@ -32,7 +32,7 @@ public class Chat
 
 	public void Leave()
 	{
-
+		NetworkManager.Instance.LeaveChatFromServerCurrentUser();
 	}
 
 	private static Chat CreateObjectChat(string name, string password)

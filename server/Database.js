@@ -105,12 +105,22 @@ export class Database{
         .select('users').eq('name', name);
         console.log(chat.data[0]);
         if(chat.data[0].users != null && chat.data[0].users.length != 0){
-            let jsonUsers = JSON.parse(chat.data[0].users)
+            let jsonUsers = JSON.parse(chat.data[0].users);
+
+            if(jsonUsers == null){
+                return null;
+            }
+
+            let chatData;
             console.log("TEST:");
             console.log(jsonUsers);
-            let chatData = {
-                users: jsonUsers.users
+
+            if(chat.data[0].users != null){
+                chatData = {
+                    users: jsonUsers.users
+                }
             }
+            
 
             return chatData;
         } else{
@@ -123,7 +133,7 @@ export class Database{
         let userData = {
             name: user.nickname,
             id: user.id
-        }
+        };
 
         if(usersData != null){
             usersData.users.push(userData);
@@ -140,6 +150,33 @@ export class Database{
 
         return isAddUsersToChat;
         
+    }
+
+    async removeCurrentUserToChat(user){
+        let usersData = await this.getUsersToChatName(user.currentChat);
+        let usersTemp = [];
+        let userData = {
+            name: user.nickname,
+            id: user.id
+        };
+
+        console.log(usersTemp.users);
+
+        if(usersData != null){
+            console.log(usersData.users);
+
+            usersTemp = usersData.users.filter(x => {
+                return x.id != userData.id;
+              });
+        }
+
+        if(usersTemp.length === 0){
+            usersTemp = null;
+        }
+
+        let isAddUsersToChat = await this.addUsersToChat(user.currentChat, usersTemp);
+
+        return isAddUsersToChat;
     }
 
     async addUsersToChat(name, usersData){

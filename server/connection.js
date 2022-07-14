@@ -86,12 +86,6 @@ export class Connection{
             if(isCreate){
                 console.log("Create chat to database!");
 
-                let isAddUserToChat = await database.addCurrentUserToChat(chatName, user);
-
-                if(isAddUserToChat){
-                    console.log("Add user to chat!");
-                }
-
                 let json = JSON.stringify(chatData);
                 socket.emit("crate-chat", json);
             }else{
@@ -118,11 +112,12 @@ export class Connection{
 
                     if(isAddUserToChat){
                         console.log("Add user to chat!");
+                        user.currentChat = name;
                     }
 
                     let usersChat = await database.getUsersToChatName(name);
                     console.log(usersChat);
-                    
+
                     if(usersChat != null){
                         console.log(usersChat.users);
                         chatCallback.users = usersChat.users;
@@ -139,8 +134,20 @@ export class Connection{
             }
         });
 
-        socket.on('leave-chat', async () =>{
-            
+        socket.on('leave-chat-current-user', async () =>{
+            if(user.currentChat != null){
+                var isRemoveCurrentUser = await database.removeCurrentUserToChat(user);
+
+                if(isRemoveCurrentUser){
+                    console.log(`Leave current chat name ${user.currentChat}`);
+                    user.currentChat = null;
+                }else{
+                    console.log(`Error Leave chat!`);
+                }
+
+            }else{
+                console.log("User not chat!");
+            }
         });
     }
 }

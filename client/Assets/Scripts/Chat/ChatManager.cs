@@ -49,6 +49,8 @@ public static class ChatManager
 
 	public static void LeaveChat()
 	{
+		if (_chat == null) return;
+
 		_chat.Leave();
 		_chat = null;
 	}

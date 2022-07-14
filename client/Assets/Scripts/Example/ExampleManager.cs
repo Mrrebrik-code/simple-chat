@@ -31,12 +31,20 @@ public class ExampleManager : MonoBehaviour
 	[SerializeField] private TMP_InputField _nameChatJoinInput;
 	[SerializeField] private TMP_InputField _passwordChatJoinInput;
 
+	[SerializeField] private UIButton _leaveChatButton;
+
 	private void Start()
 	{
 		_registeAccountButton.Subscribe(RegisterAccount);
 		_loginAccountButton.Subscribe(LoginAccount);
 		_createChatButton.Subscribe(CreateChat);
 		_joinChatButton.Subscribe(JoinChat);
+		_leaveChatButton.Subscribe(LeaveChat);
+	}
+
+	private void LeaveChat()
+	{
+		ChatManager.LeaveChat();
 	}
 
 	private void CreateChat()

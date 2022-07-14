@@ -44,6 +44,11 @@ public static class AccountManager
 		});
 	}
 
+	public static User GetCurrentUser()
+	{
+		return _account.User;
+	}
+
 	public static void LoginUserToAccount(string nickname, string password, Action<bool> callback)
 	{
 		if (CheckingDataNicknameAndPassword(nickname, password) == false) return;

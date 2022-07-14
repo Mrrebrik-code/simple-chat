@@ -147,6 +147,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.Emit(EmitIOEvent.JoinChat, json);
 	}
 
+	public void LeaveChatFromServerCurrentUser()
+	{
+		_socketManager.Socket.Emit(EmitIOEvent.LeaveChatCurrentUser);
+	}
+
 
 	//Events On Scoket IO
 	private void OnCreateChatToServer(string data)
