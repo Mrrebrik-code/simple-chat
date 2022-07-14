@@ -26,9 +26,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 	private Action<Chat, User[]> onChatJoinSuccessful;
 	private Action onChatJoinError;
-	
 
-	
 
 	//Inovke to button - "Connect"
 	public void ConnectedToServer()
@@ -74,7 +72,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.On<string>(OnIOEvent.JoinChat, OnJoinChatToServer);
 	}
 
-
+	
 
 	public void RegisterUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
 	{

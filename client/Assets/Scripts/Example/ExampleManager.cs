@@ -31,7 +31,18 @@ public class ExampleManager : MonoBehaviour
 	[SerializeField] private TMP_InputField _nameChatJoinInput;
 	[SerializeField] private TMP_InputField _passwordChatJoinInput;
 
+	[Space]
+
+	[Header("Leave chat:")]
 	[SerializeField] private UIButton _leaveChatButton;
+
+	[Space]
+
+	[Header("Users holder:")]
+	[SerializeField] private Transform _contentUserHolders;
+	[SerializeField] private UserHolder _userHolderPrefab;
+
+	private List<UserHolder> _userHolders = new List<UserHolder>();
 
 	private void Start()
 	{
@@ -45,6 +56,12 @@ public class ExampleManager : MonoBehaviour
 	private void LeaveChat()
 	{
 		ChatManager.LeaveChat();
+
+		foreach (var userHolder in _userHolders)
+		{
+			Destroy(userHolder.gameObject);
+		}
+		_userHolders = new List<UserHolder>();
 	}
 
 	private void CreateChat()
@@ -92,10 +109,7 @@ public class ExampleManager : MonoBehaviour
 		});
 	}
 
-	[SerializeField] private Transform _contentUserHolders;
-	[SerializeField] private UserHolder _userHolderPrefab;
-
-	private List<UserHolder> _userHolders = new List<UserHolder>();
+	
 	private void CreateUserToPanel(User user)
 	{
 		var userHolder = Instantiate(_userHolderPrefab, _contentUserHolders);
