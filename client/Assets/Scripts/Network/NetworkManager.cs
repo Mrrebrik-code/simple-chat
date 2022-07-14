@@ -165,7 +165,19 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 	public void SendMessageToChatFromServer(Message message)
 	{
-		// TODO: sennding message to server
+		if (_isConnected == false) return;
+
+		var jsonSerializerSettings = new JsonSerializerSettings()
+		{
+			Formatting = Formatting.Indented
+		};
+
+		var json = JsonConvert.SerializeObject(message, jsonSerializerSettings);
+
+		Debug.Log(json);
+
+
+		_socketManager.Socket.Emit(EmitIOEvent.SendMessageToChat, json);
 	}
 
 
@@ -250,7 +262,22 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 	private void OnMessageTargetUserChatToServer(string data)
 	{
-		// TODO callback message from server target user to chat
+		Debug.Log("OnMessageTargetUserChatToServer");
+		Debug.Log(data);
+
+		var messageData = JObject.Parse(data);
+
+		var messageText = messageData["Text"].ToString();
+		var user = new User(messageData["User"]["Nickname"].ToString(), messageData["User"]["Id"].ToString());
+
+		var message = new Message(messageText, user);
+
+		var chat = ChatManager.GetCurrentChat();
+
+		if(chat != null)
+		{
+			chat.MessageTargetUser(message);
+		}
 	}
 
 	private void OnRegisterUserToServer(string data)

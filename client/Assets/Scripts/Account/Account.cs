@@ -13,9 +13,6 @@ public class Account
 	{
 		User = new User(nickname, password, "default");
 
-		callbackSuccessful += OnHandleSuccesfulUser;
-		callbackError += OnHandleFailedUser;
-
 		NetworkManager.Instance.LoginUserToServer(User, callbackSuccessful, callbackError);
 	}
 
@@ -23,19 +20,6 @@ public class Account
 	{
 		User = new User(nickname, password, "default");
 
-		callbackSuccessful += OnHandleSuccesfulUser;
-		callbackError += OnHandleFailedUser;
-
 		NetworkManager.Instance.RegisterUserToServer(User, callbackSuccessful, callbackError);
-	}
-
-	private void OnHandleSuccesfulUser(string userId)
-	{
-		User.SetId(userId);
-	}
-
-	private void OnHandleFailedUser()
-	{
-		User = null;
 	}
 }

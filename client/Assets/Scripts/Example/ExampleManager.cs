@@ -64,14 +64,14 @@ public class ExampleManager : MonoBehaviour
 
 	private void SendMessage()
 	{
+		Debug.Log("SendMessage UIButton");
+
 		var messageText = _messageChatInput.text;
-
-		if (string.IsNullOrEmpty(messageText) == true) return;
-
 		var user = AccountManager.GetCurrentUser();
 
 		if(user != null)
 		{
+			Debug.Log("ChatManager.SendMessageToChat");
 			ChatManager.SendMessageToChat(messageText, user);
 		}
 	}

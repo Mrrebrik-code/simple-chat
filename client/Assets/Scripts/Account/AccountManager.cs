@@ -35,6 +35,7 @@ public static class AccountManager
 		_account.Register(nickname, password, (userId) =>
 		{
 			Debug.Log($"Successful create user! ID: {userId}");
+			_account.User.SetId(userId);
 			callback?.Invoke(true);
 		}, () =>
 
@@ -65,6 +66,7 @@ public static class AccountManager
 		_account.Login(nickname, password, (userId) =>
 		{
 			Debug.Log($"Successful login user! ID: {userId}");
+			_account.User.SetId(userId);
 			callback?.Invoke(true);
 		}, () =>
 		{

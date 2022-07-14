@@ -55,6 +55,7 @@ public static class ChatManager
 	public static void SendMessageToChat(string messageText, User user)
 	{
 		var message = new Message(messageText, user);
+
 		if(_chat != null)
 		{
 			_chat.SendMessage(message);
@@ -74,7 +75,4 @@ public static class ChatManager
 			chat.onJoinTargetUser += callbackJoin;
 		}
 	}
-
-
-
 }

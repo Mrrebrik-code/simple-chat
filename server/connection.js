@@ -170,5 +170,21 @@ export class Connection{
                 console.log("User not chat!");
             }
         });
+
+        socket.on('send-message-chat', async(data) =>{
+            let messageData = JSON.parse(data);
+            console.log(messageData);
+
+            let textMessage = messageData["Text"];
+            let userMessage = {
+                nickname: messageData["User"]["Nickname"],
+                id: messageData["User"]["Id"]
+            }
+
+            console.log(userMessage);
+
+            let json = JSON.stringify(messageData);
+            socket.to(user.currentChat).emit('user-message-chat', json);
+        });
     }
 }
