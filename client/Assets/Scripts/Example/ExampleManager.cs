@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -101,12 +102,22 @@ public class ExampleManager : MonoBehaviour
 				{
 					CreateUserToPanel(user);
 				}
+				ChatManager.GetCurrentChat().SubscribeLeave(LeaveTargetUser);
+
 			}
 			else
 			{
 				Debug.Log("**FAILED CHAT JOIN");
 			}
 		});
+	}
+
+	private void LeaveTargetUser(User user)
+	{
+		var userHolder = _userHolders.FirstOrDefault(x => x.User.Id == user.Id);
+		_userHolders.Remove(userHolder);
+
+		Destroy(userHolder.gameObject);
 	}
 
 	

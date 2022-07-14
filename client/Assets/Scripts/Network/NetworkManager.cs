@@ -70,9 +70,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 		_socketManager.Socket.On<string>(OnIOEvent.CreateChat, OnCreateChatToServer);
 		_socketManager.Socket.On<string>(OnIOEvent.JoinChat, OnJoinChatToServer);
+		_socketManager.Socket.On<string>(OnIOEvent.LeaveChatTargetUser, OnLeaveTargetUserChatToServer);
 	}
 
-	
+
 
 	public void RegisterUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
 	{
@@ -176,21 +177,13 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 		if (chatData.ContainsKey("users"))
 		{
-			Debug.Log("AASDDD");
 			var JObjectUserT = JArray.Parse(chatData["users"].ToString());
 			Debug.Log(JObjectUserT.ToString());
-			//var JObjectUsers = JObject.Parse(chatData["users"].ToString());
 
 			foreach (var userData in JObjectUserT)
 			{
 				var user = new User(userData["name"].ToString(), userData["id"].ToString());
 				users.Add(user);
-
-				/*foreach (var item in userData.Value)
-				{
-					var user = new User(item["name"].ToString(), item["id"].ToString());
-					users.Add(user);
-				}*/
 			}
 		}
 		
@@ -204,6 +197,22 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		onChatJoinError = null;
 	}
 
+	private void OnLeaveTargetUserChatToServer(string data)
+	{
+		Debug.Log("OnLeaveTargetUserChatToServer");
+		Debug.Log(data);
+
+		var userData = JObject.Parse(data);
+
+		var user = new User(userData["nickname"].ToString(), userData["id"].ToString());
+
+		var chat = ChatManager.GetCurrentChat();
+
+		if(chat != null)
+		{
+			chat.LeaveTargetUser(user);
+		}
+	}
 
 	private void OnRegisterUserToServer(string data)
 	{

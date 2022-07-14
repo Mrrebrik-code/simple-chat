@@ -141,6 +141,14 @@ export class Connection{
                 var isRemoveCurrentUser = await database.removeCurrentUserToChat(user);
 
                 if(isRemoveCurrentUser){
+                    let userData = {
+                        nickname: user.nickname,
+                        id: user.id
+                    }
+
+                    let json = JSON.stringify(userData);
+                    socket.to(user.currentChat).emit("leave-chat-target-user", json);
+
                     socket.leave(user.currentChat);
 
                     console.log(`Leave current chat name ${user.currentChat}`);

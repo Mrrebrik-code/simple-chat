@@ -115,10 +115,12 @@ export class Database{
             console.log("TEST:");
             console.log(jsonUsers);
 
-            if(chat.data[0].users != null){
+            if(chat.data[0].users != null && chat.data[0].users.length != 0){
                 chatData = {
                     users: jsonUsers.users
                 }
+            }else{
+                return null;
             }
             
 
@@ -162,7 +164,7 @@ export class Database{
 
         console.log(usersTemp.users);
 
-        if(usersData != null){
+        if(usersData.users != null){
             console.log(usersData.users);
 
             usersTemp = usersData.users.filter(x => {

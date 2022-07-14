@@ -10,10 +10,17 @@ public class Chat
 
 	public User[] Users { get; private set; }
 
+	public Action<User> onLeaveTargetUser { get; set; }
+
 	public Chat(string name, string password)
 	{
 		Name = name;
 		Password = password;
+	}
+
+	~Chat()
+	{
+		onLeaveTargetUser = null;
 	}
 
 	public static void Create(string name, string password, Action<Chat, User[]> callbackSuccessful, Action callbackError)
@@ -33,6 +40,11 @@ public class Chat
 	public void Leave()
 	{
 		NetworkManager.Instance.LeaveChatFromServerCurrentUser();
+	}
+
+	public void LeaveTargetUser(User user)
+	{
+		onLeaveTargetUser?.Invoke(user);
 	}
 
 	private static Chat CreateObjectChat(string name, string password)

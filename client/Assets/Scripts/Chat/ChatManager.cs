@@ -12,9 +12,6 @@ public static class ChatManager
 	{
 		Chat.Create(name, password, (chat, users) =>
 		{
-			_chat = chat;
-			_chat.SetUsers(users);
-
 			Debug.Log("Chat create successful!");
 			callback?.Invoke(true);
 		}, () =>
@@ -54,4 +51,19 @@ public static class ChatManager
 		_chat.Leave();
 		_chat = null;
 	}
+
+	public static Chat GetCurrentChat()
+	{
+		return _chat;
+	}
+
+	public static void SubscribeLeave(this Chat chat, Action<User> callback)
+	{
+		if(chat != null)
+		{
+			chat.onLeaveTargetUser += callback;
+		}
+	}
+
+
 }

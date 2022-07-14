@@ -13,13 +13,13 @@ public class UserHolder : MonoBehaviour
 	[SerializeField] private UIButton _kickUserButton;
 	[SerializeField] private UIButton _banUserButton;
 
-	private User _user = null;
+	public User User { get; private set; }
 
 	private Action<TypeHandleUserHolder> _callback = null;
 
 	public void Init(User user, int index)
 	{
-		_user = user;
+		User = user;
 
 		_indexUserText.text = index.ToString();
 		_idUserText.text = user.Id.ToString();
@@ -28,6 +28,7 @@ public class UserHolder : MonoBehaviour
 		_kickUserButton.Subscribe(HandleButtonKick);
 		_banUserButton.Subscribe(HandleButtonBan);
 	}
+
 
 	public void Subscribe(Action<TypeHandleUserHolder> callback)
 	{
