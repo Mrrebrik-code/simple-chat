@@ -113,6 +113,8 @@ export class Connection{
                     if(isAddUserToChat){
                         console.log("Add user to chat!");
                         user.currentChat = name;
+                        
+                        socket.join(user.currentChat);
                     }
 
                     let usersChat = await database.getUsersToChatName(name);
@@ -139,6 +141,8 @@ export class Connection{
                 var isRemoveCurrentUser = await database.removeCurrentUserToChat(user);
 
                 if(isRemoveCurrentUser){
+                    socket.leave(user.currentChat);
+
                     console.log(`Leave current chat name ${user.currentChat}`);
                     user.currentChat = null;
                 }else{
