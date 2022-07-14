@@ -73,10 +73,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.On<string>(OnIOEvent.LeaveChatTargetUser, OnLeaveTargetUserChatToServer);
 	}
 
-
-
 	public void RegisterUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
 	{
+		if (_isConnected == false) return;
+
 		onRegisterSuccessful += callbackSuccessful;
 		onRegisterError += callbackError;
 
@@ -94,6 +94,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 	public void LoginUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
 	{
+		if (_isConnected == false) return;
+
 		onLoginSuccessful += callbackSuccessful;
 		onLoginError += callbackError;
 
@@ -109,10 +111,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.Emit(EmitIOEvent.LoginAccountUser, json);
 	}
 
-
-
 	public void CreateChatToServer(Chat chat, Action<Chat, User[]> callbackSuccessful, Action callbackError)
 	{
+		if (_isConnected == false) return;
+
 		onChatCreateSuccessful += callbackSuccessful;
 		onChatCreateError += callbackError;
 
@@ -130,6 +132,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 	public void JoinChatFromServer(Chat chat, Action<Chat, User[]> callbackSuccessful, Action callbackError)
 	{
+		if (_isConnected == false) return;
+
 		onChatJoinSuccessful += callbackSuccessful;
 		onChatJoinError += callbackError;
 
@@ -148,6 +152,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 	public void LeaveChatFromServerCurrentUser()
 	{
+		if (_isConnected == false) return;
+
 		_socketManager.Socket.Emit(EmitIOEvent.LeaveChatCurrentUser);
 	}
 
@@ -248,7 +254,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_isConnected = true;
 		SubscribeSocketIOEvents();
 
-		AccountManager.Init();
+		AccountManager.Open();
 	}
 
 	private void OnDisconnectToServer()

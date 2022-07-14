@@ -112,7 +112,6 @@ export class Database{
             }
 
             let chatData;
-            console.log("TEST:");
             console.log(jsonUsers);
 
             if(chat.data[0].users != null && chat.data[0].users.length != 0){

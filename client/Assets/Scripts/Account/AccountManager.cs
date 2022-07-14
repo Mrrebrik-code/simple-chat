@@ -7,9 +7,9 @@ public static class AccountManager
 {
 	private static Account _account;
 
-	public static void Init()
+	public static void Open()
 	{
-		Debug.Log("Init account base!");
+		Debug.Log("Open account!");
 		_account = Account.Create();
 	}
 
