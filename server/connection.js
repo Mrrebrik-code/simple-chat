@@ -115,6 +115,15 @@ export class Connection{
                         user.currentChat = name;
                         
                         socket.join(user.currentChat);
+
+                        let userData = {
+                            nickname: user.nickname,
+                            id: user.id
+                        };
+    
+                        let jsonJoinUser = JSON.stringify(userData);
+
+                        socket.to(user.currentChat).emit("join-chat-target-user", jsonJoinUser);
                     }
 
                     let usersChat = await database.getUsersToChatName(name);
@@ -144,10 +153,10 @@ export class Connection{
                     let userData = {
                         nickname: user.nickname,
                         id: user.id
-                    }
+                    };
 
-                    let json = JSON.stringify(userData);
-                    socket.to(user.currentChat).emit("leave-chat-target-user", json);
+                    let jsonLeaveUser = JSON.stringify(userData);
+                    socket.to(user.currentChat).emit("leave-chat-target-user", jsonLeaveUser);
 
                     socket.leave(user.currentChat);
 

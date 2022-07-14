@@ -102,7 +102,7 @@ public class ExampleManager : MonoBehaviour
 				{
 					CreateUserToPanel(user);
 				}
-				ChatManager.GetCurrentChat().SubscribeLeave(LeaveTargetUser);
+				ChatManager.GetCurrentChat().SubscribeLeaveAndJoin(LeaveTargetUser, JoinTargetUser);
 
 			}
 			else
@@ -110,6 +110,11 @@ public class ExampleManager : MonoBehaviour
 				Debug.Log("**FAILED CHAT JOIN");
 			}
 		});
+	}
+
+	private void JoinTargetUser(User user)
+	{
+		CreateUserToPanel(user);
 	}
 
 	private void LeaveTargetUser(User user)

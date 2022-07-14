@@ -8,5 +8,6 @@
 	public const string CreateChat = "crate-chat";
 	public const string JoinChat = "join-chat";
 	public const string LeaveChatTargetUser = "leave-chat-target-user";
+	public const string JoinChatTargetUser = "join-chat-target-user";
 }
 

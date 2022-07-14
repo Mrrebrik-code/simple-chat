@@ -11,6 +11,7 @@ public class Chat
 	public User[] Users { get; private set; }
 
 	public Action<User> onLeaveTargetUser { get; set; }
+	public Action<User> onJoinTargetUser { get; set; }
 
 	public Chat(string name, string password)
 	{
@@ -21,6 +22,7 @@ public class Chat
 	~Chat()
 	{
 		onLeaveTargetUser = null;
+		onJoinTargetUser = null;
 	}
 
 	public static void Create(string name, string password, Action<Chat, User[]> callbackSuccessful, Action callbackError)
@@ -45,6 +47,11 @@ public class Chat
 	public void LeaveTargetUser(User user)
 	{
 		onLeaveTargetUser?.Invoke(user);
+	}
+
+	public void JoinTargetUser(User user)
+	{
+		onJoinTargetUser?.Invoke(user);
 	}
 
 	private static Chat CreateObjectChat(string name, string password)

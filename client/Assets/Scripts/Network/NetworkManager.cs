@@ -68,10 +68,13 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.On<string>(OnIOEvent.LoginUser, OnLoginUserToServer);
 		_socketManager.Socket.On<string>(OnIOEvent.RegisterUser, OnRegisterUserToServer);
 
-		_socketManager.Socket.On<string>(OnIOEvent.CreateChat, OnCreateChatToServer);
-		_socketManager.Socket.On<string>(OnIOEvent.JoinChat, OnJoinChatToServer);
-		_socketManager.Socket.On<string>(OnIOEvent.LeaveChatTargetUser, OnLeaveTargetUserChatToServer);
+		_socketManager.Socket.On<string>(OnIOEvent.CreateChat, OnCreateChatToServer); //Create chat
+		_socketManager.Socket.On<string>(OnIOEvent.JoinChat, OnJoinChatToServer); //Join chat
+		_socketManager.Socket.On<string>(OnIOEvent.LeaveChatTargetUser, OnLeaveTargetUserChatToServer); //Some leave chat
+		_socketManager.Socket.On<string>(OnIOEvent.JoinChatTargetUser, OnJoinTargetUserChatToServer); //Some join chat
 	}
+
+
 
 	public void RegisterUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
 	{
@@ -217,6 +220,23 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		if(chat != null)
 		{
 			chat.LeaveTargetUser(user);
+		}
+	}
+
+	private void OnJoinTargetUserChatToServer(string data)
+	{
+		Debug.Log("OnJoinTargetUserChatToServer");
+		Debug.Log(data);
+
+		var userData = JObject.Parse(data);
+
+		var user = new User(userData["nickname"].ToString(), userData["id"].ToString());
+
+		var chat = ChatManager.GetCurrentChat();
+
+		if (chat != null)
+		{
+			chat.JoinTargetUser(user);
 		}
 	}
 
