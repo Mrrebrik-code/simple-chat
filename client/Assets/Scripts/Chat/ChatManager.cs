@@ -26,7 +26,7 @@ public static class ChatManager
 		});
 	}
 
-	public static void JoinChat(string name, string password, Action<bool> callback)
+	public static void JoinChat(string name, string password, Action<bool, User[]> callback)
 	{
 		Chat.Join(name, password, (chat, users) =>
 		{
@@ -37,13 +37,13 @@ public static class ChatManager
 			Debug.LogError(_chat.Users.Length);
 
 			Debug.Log("Chat join successful!");
-			callback?.Invoke(true);
+			callback?.Invoke(true, users);
 		}, () =>
 		{
 			_chat = null;
 
 			Debug.Log("Chat join failed!");
-			callback?.Invoke(false);
+			callback?.Invoke(false, null);
 		});
 	}
 

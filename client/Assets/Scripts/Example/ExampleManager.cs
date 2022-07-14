@@ -66,17 +66,27 @@ public class ExampleManager : MonoBehaviour
 		var name = _nameChatJoinInput.text;
 		var password = _passwordChatJoinInput.text;
 
-		ChatManager.JoinChat(name, password, (callback) =>
+		ChatManager.JoinChat(name, password, (callback, users) =>
 		{
 			if (callback)
 			{
 				Debug.Log("**COMPLET CHAT JOIN");
+
+				foreach (var user in users)
+				{
+					CreateUserToPanel(user);
+				}
 			}
 			else
 			{
 				Debug.Log("**FAILED CHAT JOIN");
 			}
 		});
+	}
+
+	private void CreateUserToPanel(User user)
+	{
+
 	}
 
 	private void RegisterAccount()

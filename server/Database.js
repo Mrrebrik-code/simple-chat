@@ -103,7 +103,7 @@ export class Database{
         let chat = await supabase
         .from('chats')
         .select('users').eq('name', name);
-
+        console.log(chat.data[0]);
         if(chat.data[0].users != null && chat.data[0].users.length != 0){
             let jsonUsers = JSON.parse(chat.data[0].users)
             console.log("TEST:");
@@ -139,7 +139,6 @@ export class Database{
         let isAddUsersToChat = await this.addUsersToChat(nameChat, usersData);
 
         return isAddUsersToChat;
-        //Set new json data to database users in current cha
         
     }
 
@@ -147,16 +146,6 @@ export class Database{
         let supabase = this.supabase;
 
         let json = JSON.stringify(usersData);
-
-        //let chat = await supabase
-        //.from('chats')
-        //.insert(
-        //[ 
-        //    { 
-        //        users: json
-        //    }
-        //])
-        //.eq('name', name);
 
         let chat = await supabase
         .from('chats')
