@@ -52,6 +52,15 @@ public static class ChatManager
 		_chat = null;
 	}
 
+	public static void SendMessageToChat(string messageText, User user)
+	{
+		var message = new Message(messageText, user);
+		if(_chat != null)
+		{
+			_chat.SendMessage(message);
+		}
+	}
+
 	public static Chat GetCurrentChat()
 	{
 		return _chat;

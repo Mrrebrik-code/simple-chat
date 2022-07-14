@@ -39,6 +39,13 @@ public class ExampleManager : MonoBehaviour
 
 	[Space]
 
+	[Header("Chat messanger:")]
+	[SerializeField] private UIButton _sendMessageButton;
+	[SerializeField] private TMP_InputField _messageChatInput;
+	[SerializeField] private TMP_Text _messagesText;
+
+	[Space]
+
 	[Header("Users holder:")]
 	[SerializeField] private Transform _contentUserHolders;
 	[SerializeField] private UserHolder _userHolderPrefab;
@@ -52,6 +59,21 @@ public class ExampleManager : MonoBehaviour
 		_createChatButton.Subscribe(CreateChat);
 		_joinChatButton.Subscribe(JoinChat);
 		_leaveChatButton.Subscribe(LeaveChat);
+		_sendMessageButton.Subscribe(SendMessage);
+	}
+
+	private void SendMessage()
+	{
+		var messageText = _messageChatInput.text;
+
+		if (string.IsNullOrEmpty(messageText) == true) return;
+
+		var user = AccountManager.GetCurrentUser();
+
+		if(user != null)
+		{
+			ChatManager.SendMessageToChat(messageText, user);
+		}
 	}
 
 	private void LeaveChat()

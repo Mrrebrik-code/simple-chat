@@ -3729,7 +3729,7 @@ GameObject:
   - component: {fileID: 497700989}
   - component: {fileID: 497700988}
   m_Layer: 5
-  m_Name: NameChat_input
+  m_Name: messageText_input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5316,6 +5316,9 @@ MonoBehaviour:
   _nameChatJoinInput: {fileID: 2031204843}
   _passwordChatJoinInput: {fileID: 2114317892}
   _leaveChatButton: {fileID: 1732464079}
+  _sendMessageButton: {fileID: 1244044531}
+  _messageChatInput: {fileID: 497700988}
+  _messagesText: {fileID: 1988345383}
   _contentUserHolders: {fileID: 252727598}
   _userHolderPrefab: {fileID: 3112863392637558687, guid: e566307fb59877d469191f196520c30c, type: 3}
 --- !u!4 &824847930
@@ -7246,8 +7249,9 @@ GameObject:
   - component: {fileID: 1244044530}
   - component: {fileID: 1244044529}
   - component: {fileID: 1244044528}
+  - component: {fileID: 1244044531}
   m_Layer: 5
-  m_Name: CreateChat_btn
+  m_Name: SendMessage_btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7317,19 +7321,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1244044529}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 205754631}
-        m_TargetAssemblyTypeName: NetworkManager, Assembly-CSharp
-        m_MethodName: ConnectedToServer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1244044529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7368,6 +7360,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244044526}
   m_CullTransparentMesh: 1
+--- !u!114 &1244044531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244044526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1705f9db912d0724cb16ab9ca59b2368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1262515306
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ public class Chat
 
 	public Action<User> onLeaveTargetUser { get; set; }
 	public Action<User> onJoinTargetUser { get; set; }
+	public Action<Message> onMessageUser { get; set; }
 
 	public Chat(string name, string password)
 	{
@@ -44,6 +45,11 @@ public class Chat
 		NetworkManager.Instance.LeaveChatFromServerCurrentUser();
 	}
 
+	public void SendMessage(Message message)
+	{
+		NetworkManager.Instance.SendMessageToChatFromServer(message);
+	}
+
 	public void LeaveTargetUser(User user)
 	{
 		onLeaveTargetUser?.Invoke(user);
@@ -52,6 +58,11 @@ public class Chat
 	public void JoinTargetUser(User user)
 	{
 		onJoinTargetUser?.Invoke(user);
+	}
+
+	public void MessageTargetUser(Message message)
+	{
+		onMessageUser?.Invoke(message);
 	}
 
 	private static Chat CreateObjectChat(string name, string password)

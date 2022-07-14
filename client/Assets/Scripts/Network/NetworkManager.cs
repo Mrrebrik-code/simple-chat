@@ -70,8 +70,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 		_socketManager.Socket.On<string>(OnIOEvent.CreateChat, OnCreateChatToServer); //Create chat
 		_socketManager.Socket.On<string>(OnIOEvent.JoinChat, OnJoinChatToServer); //Join chat
+
 		_socketManager.Socket.On<string>(OnIOEvent.LeaveChatTargetUser, OnLeaveTargetUserChatToServer); //Some leave chat
 		_socketManager.Socket.On<string>(OnIOEvent.JoinChatTargetUser, OnJoinTargetUserChatToServer); //Some join chat
+
+		_socketManager.Socket.On<string>(OnIOEvent.SendMessageToChat, OnMessageTargetUserChatToServer);
 	}
 
 
@@ -160,6 +163,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.Emit(EmitIOEvent.LeaveChatCurrentUser);
 	}
 
+	public void SendMessageToChatFromServer(Message message)
+	{
+		// TODO: sennding message to server
+	}
+
 
 	//Events On Scoket IO
 	private void OnCreateChatToServer(string data)
@@ -238,6 +246,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		{
 			chat.JoinTargetUser(user);
 		}
+	}
+
+	private void OnMessageTargetUserChatToServer(string data)
+	{
+		// TODO callback message from server target user to chat
 	}
 
 	private void OnRegisterUserToServer(string data)

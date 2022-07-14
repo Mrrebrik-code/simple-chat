@@ -9,5 +9,7 @@
 	public const string JoinChat = "join-chat";
 	public const string LeaveChatTargetUser = "leave-chat-target-user";
 	public const string JoinChatTargetUser = "join-chat-target-user";
+
+	public const string SendMessageToChat = "user-message-chat";
 }
 
