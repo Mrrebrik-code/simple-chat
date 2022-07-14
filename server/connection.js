@@ -59,6 +59,8 @@ export class Connection{
                 if(userLogin != null){
                     userData["Id"] = userLogin.id;
                     user.id = userLogin.id;
+                    user.nickname = nickname;
+
 
                     console.log(`User [${user.id}] logined to account!`);
 
@@ -84,6 +86,12 @@ export class Connection{
             if(isCreate){
                 console.log("Create chat to database!");
 
+                let isAddUserToChat = await database.addCurrentUserToChat(chatName, user);
+
+                if(isAddUserToChat){
+                    console.log("Add user to chat!");
+                }
+
                 let json = JSON.stringify(chatData);
                 socket.emit("crate-chat", json);
             }else{
@@ -106,9 +114,15 @@ export class Connection{
                 var isPassword = await database.tryChatPassword(name, password);
 
                 if(isPassword){
-                
+                    let isAddUserToChat = await database.addCurrentUserToChat(name, user);
+
+                    if(isAddUserToChat){
+                        console.log("Add user to chat!");
+                    }
+
                     let usersChat = await database.getUsersToChatName(name);
                     console.log(usersChat);
+                    
                     if(usersChat != null){
                         console.log(usersChat.users);
                         chatCallback.users = usersChat.users;

@@ -105,8 +105,11 @@ export class Database{
         .select('users').eq('name', name);
 
         if(chat.data[0].users != null && chat.data[0].users.length != 0){
+            let jsonUsers = JSON.parse(chat.data[0].users)
+            console.log("TEST:");
+            console.log(jsonUsers);
             let chatData = {
-                users: chat.data[0].users
+                users: jsonUsers.users
             }
 
             return chatData;
@@ -131,8 +134,35 @@ export class Database{
             };
         }
 
-        //Set new json data to database users in current chat
+        console.log(usersData);
 
+        let isAddUsersToChat = await this.addUsersToChat(nameChat, usersData);
+
+        return isAddUsersToChat;
+        //Set new json data to database users in current cha
         
+    }
+
+    async addUsersToChat(name, usersData){
+        let supabase = this.supabase;
+
+        let json = JSON.stringify(usersData);
+
+        //let chat = await supabase
+        //.from('chats')
+        //.insert(
+        //[ 
+        //    { 
+        //        users: json
+        //    }
+        //])
+        //.eq('name', name);
+
+        let chat = await supabase
+        .from('chats')
+        .update({ users: json })
+        .eq('name', name);
+
+        return Boolean(chat.data.length);
     }
 }
