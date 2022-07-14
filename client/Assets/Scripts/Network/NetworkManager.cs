@@ -285,7 +285,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("OnRegisterUserToServer");
 		Debug.Log(data);
 
-		var user = JsonConvert.DeserializeObject<User>(data);
+		var userData = JObject.Parse(data);
+		var user = new User(userData["Nickname"].ToString(), userData["Id"].ToString());
 
 		if(user != null) onRegisterSuccessful?.Invoke(user.Id);
 		else onRegisterError?.Invoke();
@@ -299,7 +300,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("OnLoginUserToServer");
 		Debug.Log(data);
 
-		var user = JsonConvert.DeserializeObject<User>(data);
+		var userData = JObject.Parse(data);
+		var user = new User(userData["Nickname"].ToString(), userData["Id"].ToString());
 
 		if (user != null) onLoginSuccessful?.Invoke(user.Id);
 		else onLoginError?.Invoke();
