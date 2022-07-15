@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,7 @@ public class ExampleManager : MonoBehaviour
 		if(user != null)
 		{
 			Debug.Log("ChatManager.SendMessageToChat");
+			MessageTargetUser(new Message(messageText, user));
 			ChatManager.SendMessageToChat(messageText, user);
 		}
 	}
@@ -124,7 +126,7 @@ public class ExampleManager : MonoBehaviour
 				{
 					CreateUserToPanel(user);
 				}
-				ChatManager.GetCurrentChat().SubscribeLeaveAndJoin(LeaveTargetUser, JoinTargetUser);
+				ChatManager.GetCurrentChat().SubscribeLeaveAndJoin(LeaveTargetUser, JoinTargetUser, MessageTargetUser);
 
 			}
 			else
@@ -132,6 +134,11 @@ public class ExampleManager : MonoBehaviour
 				Debug.Log("**FAILED CHAT JOIN");
 			}
 		});
+	}
+
+	private void MessageTargetUser(Message message)
+	{
+		_messagesText.text += $"[{message.User.Id}] {message.User.Nickname}: {message.Text}{Environment.NewLine}";
 	}
 
 	private void JoinTargetUser(User user)

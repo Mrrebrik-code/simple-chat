@@ -67,12 +67,13 @@ public static class ChatManager
 		return _chat;
 	}
 
-	public static void SubscribeLeaveAndJoin(this Chat chat, Action<User> callbackLeave, Action<User> callbackJoin)
+	public static void SubscribeLeaveAndJoin(this Chat chat, Action<User> callbackLeave, Action<User> callbackJoin, Action<Message> callbackMessage)
 	{
 		if(chat != null)
 		{
 			chat.onLeaveTargetUser += callbackLeave;
 			chat.onJoinTargetUser += callbackJoin;
+			chat.onMessageUser += callbackMessage;
 		}
 	}
 }
