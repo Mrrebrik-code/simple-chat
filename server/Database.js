@@ -24,6 +24,8 @@ export class Database{
         return Boolean(user.data.length);
     }
 
+
+
     async tryUserNickname(nickname){
         let supabase = this.supabase;
 
@@ -101,93 +103,52 @@ export class Database{
         let supabase = this.supabase;
 
         let chat = await supabase
-        .from('chats')
-        .select('users').eq('name', name);
-        console.log(chat.data[0]);
-        if(chat.data[0].users != null && chat.data[0].users.length != 0){
-            let jsonUsers = JSON.parse(chat.data[0].users);
+        .from('chat-users')
+        .select('userName, userId').eq('name', name);
 
-            if(jsonUsers == null){
-                return null;
-            }
-
-            let chatData;
-            console.log(jsonUsers);
-
-            if(chat.data[0].users != null && chat.data[0].users.length != 0){
-                chatData = {
-                    users: jsonUsers.users
-                }
-            }else{
-                return null;
-            }
-            
-
-            return chatData;
-        } else{
+        if(chat.data.length == 0){
             return null;
+        }else{
+            return chat.data;
         }
     }
 
     async addCurrentUserToChat(nameChat, user){
-        let usersData = await this.getUsersToChatName(nameChat);
-        let userData = {
-            name: user.nickname,
-            id: user.id
-        };
+        let supabase = this.supabase;
 
-        if(usersData != null){
-            usersData.users.push(userData);
-        }
-        else{
-            usersData = {
-                users: [userData]
-            };
-        }
+        let userData = await supabase
+        .from('chat-users')
+        .insert(
+        [ 
+            { 
+                name: nameChat, 
+                userName: user.nickname,
+                userId: user.id
+            }
+        ]);
 
-        console.log(usersData);
-
-        let isAddUsersToChat = await this.addUsersToChat(nameChat, usersData);
-
-        return isAddUsersToChat;
-        
+        return true;
     }
 
     async removeCurrentUserToChat(user){
-        let usersData = await this.getUsersToChatName(user.currentChat);
-        let usersTemp = [];
-        let userData = {
-            name: user.nickname,
-            id: user.id
-        };
+        let supabase = this.supabase;
 
-        console.log(usersTemp.users);
+        const chat = await supabase
+         .from('chat-users')
+         .delete()
+         .eq("userId", user.id);
 
-        if(usersData.users != null){
-            console.log(usersData.users);
-
-            usersTemp = usersData.users.filter(x => {
-                return x.id != userData.id;
-              });
-        }
-
-        if(usersTemp.length === 0){
-            usersTemp = null;
-        }
-
-        let isAddUsersToChat = await this.addUsersToChat(user.currentChat, usersTemp);
-
-        return isAddUsersToChat;
+        return true;
     }
 
     async addUsersToChat(name, usersData){
         let supabase = this.supabase;
 
-        let json = JSON.stringify(usersData);
+        //let json = JSON.stringify(usersData);
 
         let chat = await supabase
         .from('chats')
-        .update({ users: json })
+        .update({ users: usersData })
         .eq('name', name);
 
         return Boolean(chat.data.length);

@@ -180,7 +180,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.Emit(EmitIOEvent.SendMessageToChat, json);
 	}
 
-
 	//Events On Scoket IO
 	private void OnCreateChatToServer(string data)
 	{
@@ -204,20 +203,13 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 		var chatData = JObject.Parse(data);
 
-		if (chatData.ContainsKey("users"))
+		foreach (var userData in JArray.Parse(chatData["usersChat"].ToString()))
 		{
-			var JObjectUserT = JArray.Parse(chatData["users"].ToString());
-			Debug.Log(JObjectUserT.ToString());
-
-			foreach (var userData in JObjectUserT)
-			{
-				var user = new User(userData["name"].ToString(), userData["id"].ToString());
-				users.Add(user);
-			}
+			var user = new User(userData["userName"].ToString(), userData["userId"].ToString());
+			users.Add(user);
 		}
-		
-		
-		var chat = new Chat(chatData["name"].ToString(), chatData["password"].ToString());
+
+		var chat = new Chat(chatData["chat"]["nameChat"].ToString(), chatData["chat"]["passwordChat"].ToString());
 
 		if (chat != null) onChatJoinSuccessful?.Invoke(chat, users.ToArray());
 		else onChatJoinError?.Invoke();

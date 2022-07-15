@@ -153,14 +153,16 @@ export class Connection{
                     }
 
                     let usersChat = await database.getUsersToChatName(name);
-                    console.log(usersChat);
 
-                    if(usersChat != null){
-                        console.log(usersChat.users);
-                        chatCallback.users = usersChat.users;
+                    let chatDataTemp = {
+                        chat: {
+                            nameChat: name,
+                            passwordChat: password
+                        },
+                        usersChat
                     }
 
-                    let json = JSON.stringify(chatCallback);
+                    let json = JSON.stringify(chatDataTemp);
                     socket.emit("join-chat", json);
 
                 }else{
