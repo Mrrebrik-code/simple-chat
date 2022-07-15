@@ -1088,7 +1088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac8313da542c67b44a7dfaffb077c548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _address: http://df75-37-21-154-195.eu.ngrok.io
+  _address: http://localhost:80
   _isReconection: 0
   _isAutoConnect: 1
 --- !u!4 &205754632
@@ -5268,7 +5268,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.274902, y: 89.21}
+  m_AnchoredPosition: {x: 14.274902, y: 89.21002}
   m_SizeDelta: {x: 399.01, y: -204.8}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &926961288
@@ -9313,7 +9313,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.274902, y: -416.15973}
+  m_AnchoredPosition: {x: 14.274902, y: -416.15967}
   m_SizeDelta: {x: 399.01, y: -861.14}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1644079106

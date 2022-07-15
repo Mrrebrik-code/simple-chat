@@ -8,13 +8,13 @@ export class ServerCore{
         this.database = database;
     }
 
-    connect(socket){
+    connect(socket, cryptograph){
         let server = this;
         let database = server.database;
         let connection = new Connection(database);
         let user = new User();
 
-        connection.init(socket, user, server);
+        connection.init(socket, user, server, cryptograph);
 
         let userId = user.id;
         server.connections[userId] = connection;

@@ -84,6 +84,27 @@ export class Database{
         return  Boolean(user.data.length);
     }
 
+    async getHashPasswordCurrentUser(userName){
+        let supabase = this.supabase;
+
+        let user = await supabase
+        .from('users')
+        .select('password').eq('nickname', userName);
+
+        return user.data[0].password;
+    }
+
+    async getUserId(userName){
+        let supabase = this.supabase;
+
+        let user = await supabase
+        .from('users')
+        .select('userId').eq('nickname', userName);
+
+        return user.data[0].userId;
+
+    }
+
     async tryChatPassword(name, password){
         let supabase = this.supabase;
 

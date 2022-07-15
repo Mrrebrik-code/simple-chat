@@ -9,13 +9,16 @@ export class Connection{
 
         this.chat = "";
         this.database = database;
+        this.cryptograph;
     }
 
-    init(socket, user, server){
+    init(socket, user, server, cryptograph){
         let connection = this;
         connection.socket = socket;
         connection.user = user;
         connection.server = server;
+        connection.cryptograph = cryptograph;
+
     }
 
     createEvents(){
@@ -59,7 +62,11 @@ export class Connection{
             let userData = JSON.parse(data);
             userData["Id"] = user.id; 
 
-            let isCreate = await database.createUser(userData.Id, userData.Nickname, userData.Password);
+            console.log(userData.Password);
+            let hasPassword = await connection.cryptograph.createHashPassword(userData.Password);
+            console.log(hasPassword);
+
+            let isCreate = await database.createUser(userData.Id, userData.Nickname, hasPassword);
             
             if(isCreate){
                 console.log("Create user to database!");
@@ -80,11 +87,18 @@ export class Connection{
             if(isNickname){
                 console.log("Nickname good!");
 
-                let userLogin = await database.tryUserPassword(nickname, password);
+                //let userLogin = await database.tryUserPassword(nickname, password);
+                let hasPassword = await database.getHashPasswordCurrentUser(nickname)
+                console.log(hasPassword);
+                let isCheckPassword = connection.cryptograph.checkPassword(password, hasPassword);
+                console.log(isCheckPassword);
 
-                if(userLogin != null){
-                    userData["Id"] = userLogin.id;
-                    user.id = userLogin.id;
+                if(isCheckPassword == true){
+
+                    let userIdCurrent = await database.getUserId(nickname);
+
+                    userData["Id"] = userIdCurrent;
+                    user.id = userIdCurrent;
                     user.nickname = nickname;
 
 
