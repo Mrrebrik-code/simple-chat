@@ -1,46 +1,40 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public static class ChatManager
 {
 	private static Chat _chat = null;
 
-	public static void CreateChat(string name, string password, Action<bool> callback)
+	public static void CreateChat(string nameChat, string passwordChat, Action<bool> callbackCreatedChat)
 	{
-		Chat.Create(name, password, (chat, users) =>
+		Chat.Create(nameChat, passwordChat, (chat, users) =>
 		{
 			Debug.Log("Chat create successful!");
-			callback?.Invoke(true);
+			callbackCreatedChat?.Invoke(true);
 		}, () =>
 		{
 			_chat = null;
 
 			Debug.Log("Chat create failed!");
-			callback?.Invoke(false);
+			callbackCreatedChat?.Invoke(false);
 		});
 	}
 
-	public static void JoinChat(string name, string password, Action<bool, User[]> callback)
+	public static void JoinChat(string nameChat, string passwordChat, Action<bool, User[]> callbackJoinedChat)
 	{
-		Chat.Join(name, password, (chat, users) =>
+		Chat.Join(nameChat, passwordChat, (chat, users) =>
 		{
 			_chat = chat;
 			_chat.SetUsers(users);
 
-			Debug.LogError(_chat.Name);
-			Debug.LogError(_chat.Users.Length);
-
 			Debug.Log("Chat join successful!");
-			callback?.Invoke(true, users);
+			callbackJoinedChat?.Invoke(true, users);
 		}, () =>
 		{
 			_chat = null;
 
 			Debug.Log("Chat join failed!");
-			callback?.Invoke(false, null);
+			callbackJoinedChat?.Invoke(false, null);
 		});
 	}
 
@@ -56,10 +50,7 @@ public static class ChatManager
 	{
 		var message = new Message(messageText, user);
 
-		if(_chat != null)
-		{
-			_chat.SendMessage(message);
-		}
+		_chat?.SendMessage(message);
 	}
 
 	public static Chat GetCurrentChat()

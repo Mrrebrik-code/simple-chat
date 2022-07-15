@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -72,7 +71,6 @@ public class ExampleManager : MonoBehaviour
 
 		if(user != null)
 		{
-			Debug.Log("ChatManager.SendMessageToChat");
 			MessageTargetUser(new Message(messageText, user));
 			ChatManager.SendMessageToChat(messageText, user);
 		}
@@ -80,12 +78,12 @@ public class ExampleManager : MonoBehaviour
 
 	private void LeaveChat()
 	{
+		Debug.Log("LeaveChat UIButton");
+
 		ChatManager.LeaveChat();
 
-		foreach (var userHolder in _userHolders)
-		{
-			Destroy(userHolder.gameObject);
-		}
+		_userHolders.ForEach(userHolder => Destroy(userHolder.gameObject));
+
 		_userHolders = new List<UserHolder>();
 	}
 
@@ -93,12 +91,12 @@ public class ExampleManager : MonoBehaviour
 	{
 		Debug.Log("CreateChat UIButton");
 
-		var name = _nameChatInput.text;
-		var password = _passwordChatInput.text;
+		var nameChat = _nameChatInput.text;
+		var passwordChat = _passwordChatInput.text;
 
-		ChatManager.CreateChat(name, password, (callback) =>
+		ChatManager.CreateChat(nameChat, passwordChat, (isCreateChatToServer) =>
 		{
-			if (callback)
+			if (isCreateChatToServer)
 			{
 				Debug.Log("**COMPLET CHAT CREATE");
 			}
@@ -113,21 +111,18 @@ public class ExampleManager : MonoBehaviour
 	{
 		Debug.Log("JoinChat UIButton");
 
-		var name = _nameChatJoinInput.text;
-		var password = _passwordChatJoinInput.text;
+		var nameChat = _nameChatJoinInput.text;
+		var passwordChat = _passwordChatJoinInput.text;
 
-		ChatManager.JoinChat(name, password, (callback, users) =>
+		ChatManager.JoinChat(nameChat, passwordChat, (isJoinToChat, users) =>
 		{
-			if (callback)
+			if (isJoinToChat)
 			{
 				Debug.Log("**COMPLET CHAT JOIN");
 
-				foreach (var user in users)
-				{
-					CreateUserToPanel(user);
-				}
-				ChatManager.GetCurrentChat().SubscribeLeaveAndJoin(LeaveTargetUser, JoinTargetUser, MessageTargetUser);
+				users.ToList().ForEach(user => CreateUserToPanel(user));
 
+				ChatManager.GetCurrentChat().SubscribeLeaveAndJoin(LeaveTargetUser, JoinTargetUser, MessageTargetUser);
 			}
 			else
 			{
@@ -149,7 +144,7 @@ public class ExampleManager : MonoBehaviour
 	private void LeaveTargetUser(User user)
 	{
 		var userHolder = _userHolders.FirstOrDefault(x => x.User.Id == user.Id);
-		_userHolders.Remove(userHolder);
+		userHolder.Remove(ref _userHolders);
 
 		Destroy(userHolder.gameObject);
 	}
@@ -162,17 +157,17 @@ public class ExampleManager : MonoBehaviour
 		userHolder.Init(user, _userHolders.Count + 1);
 		userHolder.Subscribe(HandleUserHolder);
 
-		_userHolders.Add(userHolder);
+		userHolder.Add(ref _userHolders);
 	}
 
 	private void HandleUserHolder(TypeHandleUserHolder typeHandler)
 	{
 		switch (typeHandler)
 		{
-			case TypeHandleUserHolder.kick:
+			case TypeHandleUserHolder.KICK:
 				Debug.Log("TypeHandleUserHolder.kick");
 				break;
-			case TypeHandleUserHolder.ban:
+			case TypeHandleUserHolder.BAN:
 				Debug.Log("TypeHandleUserHolder.ban");
 				break;
 		}
@@ -184,9 +179,9 @@ public class ExampleManager : MonoBehaviour
 
 		var nickname = _nicknameInput.text;
 		var password = _passwordInput.text;
-		AccountManager.RegisterUserFromAccount(nickname, password, (callback) =>
+		AccountManager.RegisterUserFromAccount(nickname, password, (isRegister) =>
 		{
-			if (callback)
+			if (isRegister)
 			{
 				Debug.LogError("COMPLET REGISTER");
 			}
@@ -203,9 +198,9 @@ public class ExampleManager : MonoBehaviour
 
 		var nickname = _nicknameInput2.text;
 		var password = _passwordInput2.text;
-		AccountManager.LoginUserToAccount(nickname, password, (callback) =>
+		AccountManager.LoginUserToAccount(nickname, password, (isLogin) =>
 		{
-			if (callback)
+			if (isLogin)
 			{
 				Debug.LogError("COMPLET LOGIN");
 			}

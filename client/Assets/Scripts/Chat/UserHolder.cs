@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -43,12 +41,12 @@ public class UserHolder : MonoBehaviour
 	private void HandleButtonKick()
 	{
 		Debug.Log("KICK");
-		_callback?.Invoke(TypeHandleUserHolder.kick);
+		_callback?.Invoke(TypeHandleUserHolder.KICK);
 	}
 
 	private void HandleButtonBan()
 	{
 		Debug.Log("BAN");
-		_callback?.Invoke(TypeHandleUserHolder.ban);
+		_callback?.Invoke(TypeHandleUserHolder.BAN);
 	}
 }

@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+[Serializable]
 public class Chat 
 {
 	public string Name { get; private set; }
 	public string Password { get; private set; }
-
 	public User[] Users { get; private set; }
 
 	public Action<User> onLeaveTargetUser { get; set; }
@@ -26,18 +23,18 @@ public class Chat
 		onJoinTargetUser = null;
 	}
 
-	public static void Create(string name, string password, Action<Chat, User[]> callbackSuccessful, Action callbackError)
+	public static void Create(string nameChat, string passwordChat, Action<Chat, User[]> callbackSuccessfulCreated, Action callbackErrorCreated)
 	{
-		var chat = CreateObjectChat(name, password);
+		Chat chat = CreateObjectChat(nameChat, passwordChat);
 
-		NetworkManager.Instance.CreateChatToServer(chat, callbackSuccessful, callbackError);
+		NetworkManager.Instance.CreateChatToServer(chat, callbackSuccessfulCreated, callbackErrorCreated);
 	}
 
-	public static void Join(string name, string password, Action<Chat, User[]> callbackSuccessful, Action callbackError)
+	public static void Join(string nameChat, string passwordChat, Action<Chat, User[]> callbackSuccessfulJoined, Action callbackErrorJoined)
 	{
-		var chat = CreateObjectChat(name, password);
+		Chat chat = CreateObjectChat(nameChat, passwordChat);
 
-		NetworkManager.Instance.JoinChatFromServer(chat, callbackSuccessful, callbackError);
+		NetworkManager.Instance.JoinChatFromServer(chat, callbackSuccessfulJoined, callbackErrorJoined);
 	}
 
 	public void Leave()
@@ -65,9 +62,9 @@ public class Chat
 		onMessageUser?.Invoke(message);
 	}
 
-	private static Chat CreateObjectChat(string name, string password)
+	private static Chat CreateObjectChat(string nameChat, string passwordChat)
 	{
-		var chat = new Chat(name, password);
+		Chat chat = new Chat(nameChat, passwordChat);
 
 		return chat;
 	}

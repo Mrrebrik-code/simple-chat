@@ -1,5 +1,5 @@
 public enum TypeHandleUserHolder
 { 
-	kick,
-	ban
+	KICK,
+	BAN
 }

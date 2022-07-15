@@ -15,6 +15,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
 	[SerializeField] private bool _isAutoConnect = true;
 	private bool _isConnected = false;
 
+	private JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings()
+	{
+		Formatting = Formatting.Indented
+	};
+
 	private Action<string> onRegisterSuccessful;
 	private Action onRegisterError;
 
@@ -27,7 +32,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
 	private Action<Chat, User[]> onChatJoinSuccessful;
 	private Action onChatJoinError;
 
-
 	//Inovke to button - "Connect"
 	public void ConnectedToServer()
 	{
@@ -39,7 +43,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 				Reconnection = _isReconection
 			};
 
-			_socketManager = new SocketManager(new System.Uri(_address), socketOptions);
+			_socketManager = new SocketManager(new Uri(_address), socketOptions);
 
 			_socketManager.Socket.On(SocketIOEventTypes.Connect, OnConnectToServer);
 			_socketManager.Socket.On(SocketIOEventTypes.Disconnect, OnDisconnectToServer);
@@ -65,8 +69,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 			return;
 		}
 
-		_socketManager.Socket.On<string>(OnIOEvent.LoginUser, OnLoginUserToServer);
-		_socketManager.Socket.On<string>(OnIOEvent.RegisterUser, OnRegisterUserToServer);
+		_socketManager.Socket.On<string>(OnIOEvent.LoginUser, OnLoginUserToServer); //Login user
+		_socketManager.Socket.On<string>(OnIOEvent.RegisterUser, OnRegisterUserToServer); //Register user
 
 		_socketManager.Socket.On<string>(OnIOEvent.CreateChat, OnCreateChatToServer); //Create chat
 		_socketManager.Socket.On<string>(OnIOEvent.JoinChat, OnJoinChatToServer); //Join chat
@@ -74,10 +78,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		_socketManager.Socket.On<string>(OnIOEvent.LeaveChatTargetUser, OnLeaveTargetUserChatToServer); //Some leave chat
 		_socketManager.Socket.On<string>(OnIOEvent.JoinChatTargetUser, OnJoinTargetUserChatToServer); //Some join chat
 
-		_socketManager.Socket.On<string>(OnIOEvent.SendMessageToChat, OnMessageTargetUserChatToServer);
+		_socketManager.Socket.On<string>(OnIOEvent.SendMessageToChat, OnMessageTargetUserChatToServer); //Some message chat
 	}
-
-
 
 	public void RegisterUserToServer(User user, Action<string> callbackSuccessful, Action callbackError)
 	{
@@ -86,12 +88,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		onRegisterSuccessful += callbackSuccessful;
 		onRegisterError += callbackError;
 
-		var jsonSerializerSettings = new JsonSerializerSettings()
-		{
-			Formatting = Formatting.Indented
-		};
-
-		var json = JsonConvert.SerializeObject(user, jsonSerializerSettings);
+		string json = JsonConvert.SerializeObject(user, _jsonSerializerSettings);
 
 		Debug.Log(json);
 
@@ -105,12 +102,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		onLoginSuccessful += callbackSuccessful;
 		onLoginError += callbackError;
 
-		var jsonSerializerSettings = new JsonSerializerSettings()
-		{
-			Formatting = Formatting.Indented
-		};
-
-		var json = JsonConvert.SerializeObject(user, jsonSerializerSettings);
+		string json = JsonConvert.SerializeObject(user, _jsonSerializerSettings);
 
 		Debug.Log(json);
 
@@ -124,12 +116,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		onChatCreateSuccessful += callbackSuccessful;
 		onChatCreateError += callbackError;
 
-		var jsonSerializerSettings = new JsonSerializerSettings()
-		{
-			Formatting = Formatting.Indented
-		};
-
-		var json = JsonConvert.SerializeObject(chat, jsonSerializerSettings);
+		string json = JsonConvert.SerializeObject(chat, _jsonSerializerSettings);
 
 		Debug.Log(json);
 
@@ -143,15 +130,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		onChatJoinSuccessful += callbackSuccessful;
 		onChatJoinError += callbackError;
 
-		var jsonSerializerSettings = new JsonSerializerSettings()
-		{
-			Formatting = Formatting.Indented
-		};
-
-		var json = JsonConvert.SerializeObject(chat, jsonSerializerSettings);
+		string json = JsonConvert.SerializeObject(chat, _jsonSerializerSettings);
 
 		Debug.Log(json);
-
 
 		_socketManager.Socket.Emit(EmitIOEvent.JoinChat, json);
 	}
@@ -167,15 +148,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
 	{
 		if (_isConnected == false) return;
 
-		var jsonSerializerSettings = new JsonSerializerSettings()
-		{
-			Formatting = Formatting.Indented
-		};
-
-		var json = JsonConvert.SerializeObject(message, jsonSerializerSettings);
+		string json = JsonConvert.SerializeObject(message, _jsonSerializerSettings);
 
 		Debug.Log(json);
-
 
 		_socketManager.Socket.Emit(EmitIOEvent.SendMessageToChat, json);
 	}
@@ -186,7 +161,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("OnCreateChatToServer");
 		Debug.Log(data);
 
-		var chat = JsonConvert.DeserializeObject<Chat>(data);
+		Chat chat = JsonConvert.DeserializeObject<Chat>(data);
 
 		if (chat != null) onChatCreateSuccessful?.Invoke(chat, null);
 		else onChatCreateError?.Invoke();
@@ -201,15 +176,15 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
 		List<User> users = new List<User>();
 
-		var chatData = JObject.Parse(data);
+		JObject chatData = JObject.Parse(data);
 
-		foreach (var userData in JArray.Parse(chatData["usersChat"].ToString()))
+		foreach (JToken userData in JArray.Parse(chatData["usersChat"].ToString()))
 		{
-			var user = new User(userData["userName"].ToString(), userData["userId"].ToString());
+			User user = new User(userData["userName"].ToString(), userData["userId"].ToString());
 			users.Add(user);
 		}
 
-		var chat = new Chat(chatData["chat"]["nameChat"].ToString(), chatData["chat"]["passwordChat"].ToString());
+		Chat chat = new Chat(chatData["chat"]["nameChat"].ToString(), chatData["chat"]["passwordChat"].ToString());
 
 		if (chat != null) onChatJoinSuccessful?.Invoke(chat, users.ToArray());
 		else onChatJoinError?.Invoke();
@@ -223,11 +198,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("OnLeaveTargetUserChatToServer");
 		Debug.Log(data);
 
-		var userData = JObject.Parse(data);
+		JObject userData = JObject.Parse(data);
 
-		var user = new User(userData["nickname"].ToString(), userData["id"].ToString());
+		User user = new User(userData["nickname"].ToString(), userData["id"].ToString());
 
-		var chat = ChatManager.GetCurrentChat();
+		Chat chat = ChatManager.GetCurrentChat();
 
 		if(chat != null)
 		{
@@ -240,11 +215,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("OnJoinTargetUserChatToServer");
 		Debug.Log(data);
 
-		var userData = JObject.Parse(data);
+		JObject userData = JObject.Parse(data);
 
-		var user = new User(userData["nickname"].ToString(), userData["id"].ToString());
+		User user = new User(userData["nickname"].ToString(), userData["id"].ToString());
 
-		var chat = ChatManager.GetCurrentChat();
+		Chat chat = ChatManager.GetCurrentChat();
 
 		if (chat != null)
 		{
@@ -257,14 +232,14 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("OnMessageTargetUserChatToServer");
 		Debug.Log(data);
 
-		var messageData = JObject.Parse(data);
+		JObject messageData = JObject.Parse(data);
 
-		var messageText = messageData["Text"].ToString();
-		var user = new User(messageData["User"]["Nickname"].ToString(), messageData["User"]["Id"].ToString());
+		string messageText = messageData["Text"].ToString();
+		User user = new User(messageData["User"]["Nickname"].ToString(), messageData["User"]["Id"].ToString());
 
-		var message = new Message(messageText, user);
+		Message message = new Message(messageText, user);
 
-		var chat = ChatManager.GetCurrentChat();
+		Chat chat = ChatManager.GetCurrentChat();
 
 		if(chat != null)
 		{
@@ -277,8 +252,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("OnRegisterUserToServer");
 		Debug.Log(data);
 
-		var userData = JObject.Parse(data);
-		var user = new User(userData["Nickname"].ToString(), userData["Id"].ToString());
+		JObject userData = JObject.Parse(data);
+		User user = new User(userData["Nickname"].ToString(), userData["Id"].ToString());
 
 		if(user != null) onRegisterSuccessful?.Invoke(user.Id);
 		else onRegisterError?.Invoke();
@@ -292,8 +267,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 		Debug.Log("OnLoginUserToServer");
 		Debug.Log(data);
 
-		var userData = JObject.Parse(data);
-		var user = new User(userData["Nickname"].ToString(), userData["Id"].ToString());
+		JObject userData = JObject.Parse(data);
+		User user = new User(userData["Nickname"].ToString(), userData["Id"].ToString());
 
 		if (user != null) onLoginSuccessful?.Invoke(user.Id);
 		else onLoginError?.Invoke();

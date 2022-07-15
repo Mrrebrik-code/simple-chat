@@ -1,4 +1,6 @@
-[System.Serializable]
+using System;
+
+[Serializable]
 public class Message
 {
 	public string Text { get; private set; }
