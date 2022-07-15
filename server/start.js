@@ -12,11 +12,11 @@ const io = new Server(httpServer, {
 });
 
 const database = new Database(urlSupabase, pulicApiKeySupabse);
-const server = new ServerCore(database);
+const serverCore = new ServerCore(database);
 
 
 io.on('connection', function(socket){
-    let connection = server.connect(socket);
+    let connection = serverCore.connect(socket);
 
     connection.createEvents();
 });

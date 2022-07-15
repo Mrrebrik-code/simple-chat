@@ -127,6 +127,7 @@ export class Database{
             }
         ]);
 
+        //Todo to remove successful/fail
         return true;
     }
 
@@ -138,6 +139,7 @@ export class Database{
          .delete()
          .eq("userId", user.id);
 
+        //Todo to remove successful/fail
         return true;
     }
 
