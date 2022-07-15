@@ -21,6 +21,6 @@ io.on('connection', function(socket){
     connection.createEvents();
 });
 
-httpServer.listen(52300, ()=>{
-    console.log('Start server to port: 52300');
+httpServer.listen(80, ()=>{
+    console.log('Start server to port: 80');
 });
