@@ -29,7 +29,8 @@ export class Database{
 
         let user = await supabase
         .from('users')
-        .select('nickname').eq('nickname', nickname);
+        .select('nickname')
+        .eq('nickname', nickname);
 
         return  Boolean(user.data.length);
     }
@@ -39,7 +40,8 @@ export class Database{
 
         let user = await supabase
         .from('users')
-        .select('userId, password').eq('nickname', nickname);
+        .select('userId, password')
+        .eq('nickname', nickname);
         
         if(user.data[0].password == password){
 
@@ -77,7 +79,8 @@ export class Database{
 
         let user = await supabase
         .from('chats')
-        .select('name').eq('name', name);
+        .select('name')
+        .eq('name', name);
 
         return  Boolean(user.data.length);
     }
@@ -87,7 +90,8 @@ export class Database{
 
         let user = await supabase
         .from('users')
-        .select('password').eq('nickname', userName);
+        .select('password')
+        .eq('nickname', userName);
 
         return user.data[0].password;
     }
@@ -97,7 +101,8 @@ export class Database{
 
         let user = await supabase
         .from('users')
-        .select('userId').eq('nickname', userName);
+        .select('userId')
+        .eq('nickname', userName);
 
         return user.data[0].userId;
 
@@ -108,7 +113,8 @@ export class Database{
 
         let chat = await supabase
         .from('chats')
-        .select('password').eq('name', name);
+        .select('password')
+        .eq('name', name);
         
         if(chat.data[0].password == password){
             return true;
@@ -123,7 +129,8 @@ export class Database{
 
         let chat = await supabase
         .from('chat-users')
-        .select('userName, userId').eq('name', name);
+        .select('userName, userId')
+        .eq('name', name);
 
         if(chat.data.length == 0){
             return null;
@@ -164,8 +171,6 @@ export class Database{
 
     async addUsersToChat(name, usersData){
         let supabase = this.supabase;
-
-        //let json = JSON.stringify(usersData);
 
         let chat = await supabase
         .from('chats')
