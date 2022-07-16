@@ -24,7 +24,6 @@ export class Connection{
     createEvents(){
         let connection = this;
         let socket = connection.socket;
-        let server = connection.server;
         let user = connection.user;
         let database = connection.database;
 
@@ -52,7 +51,6 @@ export class Connection{
                 }else{
                     console.log(`Error Leave chat!`);
                 }
-
             }else{
                 console.log("User not chat!");
             }
@@ -62,9 +60,7 @@ export class Connection{
             let userData = JSON.parse(data);
             userData["Id"] = user.id; 
 
-            console.log(userData.Password);
             let hasPassword = await connection.cryptograph.createHashPassword(userData.Password);
-            console.log(hasPassword);
 
             let isCreate = await database.createUser(userData.Id, userData.Nickname, hasPassword);
             
@@ -73,7 +69,7 @@ export class Connection{
 
                 let json = JSON.stringify(userData);
                 socket.emit("register-user", json);
-            }else{
+            } else{
                 console.log("Error creating user.");
             }
         });
@@ -85,13 +81,8 @@ export class Connection{
 
             let isNickname = await database.tryUserNickname(nickname);
             if(isNickname){
-                console.log("Nickname good!");
-
-                //let userLogin = await database.tryUserPassword(nickname, password);
                 let hasPassword = await database.getHashPasswordCurrentUser(nickname)
-                console.log(hasPassword);
                 let isCheckPassword = connection.cryptograph.checkPassword(password, hasPassword);
-                console.log(isCheckPassword);
 
                 if(isCheckPassword == true){
 
@@ -101,10 +92,10 @@ export class Connection{
                     user.id = userIdCurrent;
                     user.nickname = nickname;
 
-
                     console.log(`User [${user.id}] logined to account!`);
 
                     let json = JSON.stringify(userData);
+
                     socket.emit("login-user", json);
                 }else{
                     console.log(`Error logined user. Failed password!`);
@@ -137,11 +128,6 @@ export class Connection{
             let chatData = JSON.parse(data);
             let name = chatData["Name"];
             let password = chatData["Password"];
-
-            let chatCallback = {
-                name: name,
-                password, password
-            }
 
             let isName = await database.tryChatName(name);
             if(isName){
@@ -215,15 +201,6 @@ export class Connection{
 
         socket.on('send-message-chat', async(data) =>{
             let messageData = JSON.parse(data);
-            console.log(messageData);
-
-            let textMessage = messageData["Text"];
-            let userMessage = {
-                nickname: messageData["User"]["Nickname"],
-                id: messageData["User"]["Id"]
-            }
-
-            console.log(userMessage);
 
             let json = JSON.stringify(messageData);
             socket.to(user.currentChat).emit('user-message-chat', json);

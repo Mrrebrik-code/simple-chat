@@ -24,8 +24,6 @@ export class Database{
         return Boolean(user.data.length);
     }
 
-
-
     async tryUserNickname(nickname){
         let supabase = this.supabase;
 
