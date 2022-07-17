@@ -137,5 +137,3 @@ Logined user two step!
         }
     }
 ```
-
-# Client (Node.js)
